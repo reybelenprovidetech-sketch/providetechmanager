@@ -1,44 +1,61 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Manager Daily System</title>
-<style>
-:root{--bg:#f6f7f9;--card:#fff;--tx:#1d2430;--mu:#667085;--ac:#0f766e;--bd:#e3e6ea;--ok:#16a34a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#14181f;--card:#1d232d;--tx:#e8ebf0;--mu:#98a2b3;--ac:#2dd4bf;--bd:#2d3542}}
+<style>:root{--bg:#eef2f7;--card:#fff;--tx:#0f172a;--mu:#64748b;--ac:#0d9488;--ac2:#4f46e5;--bd:#e2e8f0;--ok:#16a34a;--sh:0 1px 2px rgba(15,23,42,.06),0 10px 28px rgba(15,23,42,.07);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0b1120;--card:#151e2e;--tx:#e5e9f0;--mu:#94a3b8;--bd:#263247;--sh:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.3)}}
 *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}
-.w{max-width:980px;margin:0 auto;padding:16px}
-h1{font-size:20px;margin:0}.sub{color:var(--mu);font-size:13px}
-nav{display:flex;gap:6px;margin:14px 0;flex-wrap:wrap}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 "Inter",system-ui,-apple-system,Segoe UI,sans-serif}
+.w{max-width:1020px;margin:0 auto;padding:16px}
+.hero{background:linear-gradient(135deg,#0f766e 0%,#4f46e5 100%);color:#fff;border-radius:18px;padding:20px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:var(--sh)}
+h1{font-size:20px;margin:0;letter-spacing:-.01em}.hero .sub{color:rgba(255,255,255,.85)}
+#clk{font-size:38px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em;background:rgba(255,255,255,.15);padding:6px 18px;border-radius:14px}
+.sub{color:var(--mu);font-size:13px}.lbl{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--mu);margin-bottom:8px}
+nav{display:flex;gap:6px;margin:16px 0;flex-wrap:wrap;background:var(--card);padding:6px;border-radius:999px;box-shadow:var(--sh);width:fit-content;max-width:100%}
 button,select,input{font:inherit;color:var(--tx)}
-nav button{padding:8px 14px;border:1px solid var(--bd);background:var(--card);border-radius:8px;cursor:pointer}
-nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:14px}
-.bar{height:8px;background:var(--bd);border-radius:6px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
-.t{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:1px solid var(--bd)}.t:first-of-type{border-top:0}
-.t input{margin-top:4px;width:18px;height:18px;accent-color:var(--ac);flex:none}.t.d span{text-decoration:line-through;color:var(--mu)}
-.t small{color:var(--mu)}.x{margin-left:auto;border:0;background:none;color:var(--mu);cursor:pointer}
-.row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-.row input,.row select{padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--card);flex:1;min-width:140px}
-.b{padding:8px 14px;border:0;border-radius:8px;background:var(--ac);color:#fff;cursor:pointer}.b.g{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
-.sc{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:6px 8px;border-bottom:1px solid var(--bd);text-align:left;white-space:nowrap}th{color:var(--mu);position:sticky;top:0;background:var(--card)}
-.k{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:10px}.k div{background:var(--bg);border-radius:10px;padding:10px}.k b{font-size:22px;display:block}
-textarea{width:100%;min-height:220px;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--card);font:13px/1.5 ui-monospace,monospace}
-.mon{background:#fef3c7;color:#92400e;padding:8px 12px;border-radius:8px;margin-bottom:12px;font-size:14px}
+nav button{padding:8px 18px;border:0;background:none;border-radius:999px;cursor:pointer;color:var(--mu);font-weight:600}
+nav button.on{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:var(--sh)}
+.bar{height:10px;background:var(--bd);border-radius:6px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,#14b8a6,#4f46e5);width:0;transition:width .3s;border-radius:6px}
+.t{display:flex;gap:10px;align-items:flex-start;padding:9px 6px;border-top:1px solid var(--bd);border-radius:8px}.t:first-of-type{border-top:0}.t:hover{background:rgba(100,116,139,.07)}
+.t input{margin-top:3px;width:18px;height:18px;accent-color:var(--ac);flex:none}.t.d span{text-decoration:line-through;color:var(--mu)}
+.x{margin-left:auto;border:0;background:none;color:var(--mu);cursor:pointer}.x:hover{color:#dc2626}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.row input,.row select{padding:9px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);flex:1;min-width:140px}
+.row input:focus,textarea:focus{outline:2px solid var(--ac);border-color:transparent}
+.b{padding:9px 16px;border:0;border-radius:10px;background:var(--ac);color:#fff;cursor:pointer;font-weight:600}.b:hover{filter:brightness(1.08)}
+.b.g{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:7px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);cursor:pointer;font-weight:600;color:var(--mu)}
+.chip.on{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border-color:transparent}
+.chip.s{border-radius:8px;font-weight:500}.chip.s.on{background:var(--ac)}
+.sc{overflow-x:auto;border:1px solid var(--bd);border-radius:12px}table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--bd);text-align:left;white-space:nowrap}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);position:sticky;top:0;background:var(--card);z-index:1}
+tr:nth-child(even) td{background:rgba(100,116,139,.06)}tr:hover td{background:rgba(13,148,136,.1)}
+td[contenteditable]:focus,th[contenteditable]:focus{outline:2px solid var(--ac);outline-offset:-2px;background:var(--card)}
+textarea{width:100%;min-height:220px;padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--card);font:13px/1.5 ui-monospace,monospace}
+.mon{background:linear-gradient(90deg,#fef3c7,#fde68a);color:#92400e;padding:10px 14px;border-radius:12px;margin-bottom:14px;font-weight:600}
+.ttl{font-size:17px;font-weight:700}.k{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 0}.k span{background:rgba(13,148,136,.12);color:var(--ac);padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600}
 </style></head><body><div class="w">
-<h1>Manager Daily System</h1><div class="sub" id="dt"></div>
+<div class="hero"><div><h1>Manager Daily System</h1><div class="sub" id="dt"></div></div><div id="clk"></div></div>
 <nav id="nav"><button data-p="today" class="on">Today</button><button data-p="clients">Clients &amp; Data</button><button data-p="report">Daily Report</button></nav>
 
 <section id="today"><div class="mon" id="mon" hidden>Monday: Team meeting at 11:00 AM.</div>
 <div class="card"><b>Overall progress</b> <span id="pt" class="sub"></span><div class="bar"><i id="pb"></i></div></div>
-<div class="card"><b>MORNING</b><div class="bar"><i id="bm"></i></div><div id="L_m"></div></div>
-<div class="card"><b>AFTERNOON</b><div class="bar"><i id="ba"></i></div><div id="L_a"></div></div>
+<div class="card"><b>☀️ MORNING</b><div class="bar"><i id="bm"></i></div><div id="L_m"></div></div>
+<div class="card"><b>🌤️ AFTERNOON</b><div class="bar"><i id="ba"></i></div><div id="L_a"></div></div>
 <div class="card"><div class="row"><select id="nl"><option value="m">Morning</option><option value="a">Afternoon</option></select><input id="nt" placeholder="Add a custom task for today"><button class="b" id="na">Add</button></div>
 <button class="b g" id="rs">Reset today's checklist</button></div></section>
 
 <section id="clients" hidden>
-<div class="card"><b>Upload / update data</b><div class="sub">In Google Sheets: File &rarr; Download &rarr; CSV. Then choose the file below. Uploading again replaces that dataset.</div>
-<div class="row" style="margin-top:8px"><select id="ds"><option value="closed">Closed Deal Clients (Name, Business, Sales Rep, New, Renewal)</option><option value="accounts">List of Clients (Ad Accounts)</option><option value="sheet1">Sheet 1 (first sheet)</option></select><input type="file" id="fi" accept=".csv,text/csv"></div><div class="sub" style="margin:8px 0 4px">Or copy the cells in Google Sheets (include the header row) and paste here. You can also type rows directly in the table below.</div><textarea id="ps" style="min-height:90px" placeholder="Paste cells here"></textarea><div class="row" style="margin-top:8px"><button class="b" id="pb2">Import pasted data</button><button class="b g" id="ar">+ Add row</button></div></div>
-<div class="card"><div class="k" id="kp"></div>
-<div class="row"><input id="q" placeholder="Search name, page, ID..."><select id="rp"><option value="">All sales reps</option></select><button class="b g" id="ex">Download CSV</button></div>
-<div class="sc" style="max-height:480px;overflow:auto"><table id="tb"></table></div></div></section>
+<div class="card"><div class="lbl">SHEETS</div><div class="chips" id="tabs"></div>
+<div class="row"><button class="b" id="ns">+ New sheet</button><button class="b g" id="rn">Rename sheet</button><button class="b g" id="ds2">Delete sheet</button></div></div>
+<div class="card"><div class="lbl">SECTIONS (e.g. months) IN <span id="sn"></span></div><div class="chips" id="stabs"></div>
+<div class="row"><button class="b" id="nsec">+ New section</button><button class="b g" id="rsec">Rename section</button><button class="b g" id="dsec">Delete section</button></div></div>
+<div class="card"><div class="row" style="margin:0"><input id="q" placeholder="Search names, pages, IDs across ALL sheets and sections..."><button class="b" id="sb">Search</button><button class="b g" id="sx">Clear</button></div><div id="sr"></div></div>
+<div class="card"><div class="ttl" id="ttl"></div><div class="k" id="si"></div>
+<div class="row"><button class="b" id="ar">+ Row</button><button class="b g" id="ac">+ Column</button><button class="b g" id="ex">Download CSV</button><label class="b g" style="cursor:pointer">Upload CSV<input type="file" id="fi" accept=".csv,text/csv" hidden></label></div>
+<div class="sub" style="margin-bottom:8px">Tap any cell or column title to type or edit. It saves automatically.</div>
+<div class="sc" style="max-height:480px;overflow:auto"><table id="tb"></table></div>
+<details style="margin-top:12px"><summary class="sub" style="cursor:pointer">Paste from Google Sheets</summary><textarea id="ps" style="min-height:90px;margin-top:6px" placeholder="Copy cells (with header row) and paste here"></textarea><button class="b" id="pb2" style="margin-top:8px">Import into this section</button></details></div></section>
 
 <section id="report" hidden><div class="card"><div class="sub">Auto-built from today's checklist and uploaded data. Add your notes, then copy and send to the Head.</div>
 <div class="row" style="margin-top:8px"><input id="nc" type="number" min="0" placeholder="New clients today"><input id="at" type="number" min="0" placeholder="Present employees"><input id="ab" type="number" min="0" placeholder="Absent employees"></div>
@@ -107,20 +124,37 @@ $('#na').onclick=()=>{const v=$('#nt').value.trim();if(!v)return;const l=$('#nl'
 $('#rs').onclick=()=>{if(confirm("Reset today's checklist?")){S.done={};sv('mgr_day',S);draw()}};
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));['today','clients','report'].forEach(p=>$('#'+p).hidden=p!==b.dataset.p);if(b.dataset.p==='clients')table()});
 function csv(t){const r=[];let row=[],f='',q=false;for(let i=0;i<t.length;i++){const c=t[i];if(q){if(c==='"'&&t[i+1]==='"'){f+='"';i++}else if(c==='"')q=false;else f+=c}else if(c==='"')q=true;else if(c===','){row.push(f);f=''}else if(c==='\n'||c==='\r'){if(c==='\r'&&t[i+1]==='\n')i++;row.push(f);r.push(row);row=[];f=''}else f+=c}row.push(f);r.push(row);return r.filter(x=>x.some(y=>y.trim()))}
-$('#fi').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const rows=csv(String(r.result));D[$('#ds').value]={h:rows[0],r:rows.slice(1)};sv('mgr_data',D);table()};r.readAsText(f);e.target.value=''};
-$('#ds').onchange=()=>table();['#q','#rp'].forEach(s=>$(s).oninput=table);
-function ci(h,k){return h.findIndex(x=>x.toLowerCase().includes(k))}
-function table(){const d=D[$('#ds').value],tb=$('#tb');if(!d){tb.innerHTML='<tr><td>No data yet. Upload a CSV above.</td></tr>';$('#kp').innerHTML='';return}
-const ri=ci(d.h,'sales rep'),q=$('#q').value.toLowerCase(),rp=$('#rp').value;
-const reps=[...new Set(d.r.map(x=>(x[ri]||'').trim()).filter(Boolean))].sort(),cur=$('#rp').value;
-$('#rp').innerHTML='<option value="">All sales reps</option>'+reps.map(x=>`<option${x===cur?' selected':''}>${esc(x)}</option>`).join('');
-let rows=d.r.filter(x=>(!q||x.join(' ').toLowerCase().includes(q))&&(!rp||(x[ri]||'').trim()===rp));
-let k=`<div><b>${rows.length}</b>Rows</div>`;
-if($('#ds').value==='closed'){const ni=ci(d.h,'new'),rn=ci(d.h,'renewal'),n=rows.filter(x=>(x[ni]||'').trim()).length,e=rows.filter(x=>(x[rn]||'').trim()).length;k+=`<div><b>${n}</b>New</div><div><b>${e}</b>Renewal</div><div><b>${n+e?Math.round(e/(n+e)*100):0}%</b>Renewal rate</div>`}
-else{const si=d.h.findIndex(x=>/not renew/i.test(x));const nr=rows.filter(x=>x.join(' ').toLowerCase().includes('not renew')).length;k+=`<div><b>${nr}</b>Not renewing</div>`}
-$('#kp').innerHTML=k;tb.innerHTML='<tr><th></th>'+d.h.map(x=>`<th>${esc(x)}</th>`).join('')+'</tr>'+rows.map(x=>{const n=d.r.indexOf(x);return `<tr><td><button class="x" data-del="${n}">✕</button></td>`+d.h.map((_,i)=>`<td contenteditable data-r="${n}" data-c="${i}">${esc(x[i]||'')}</td>`).join('')+'</tr>'}).join('')}
+const mon=new Date().toLocaleString('en-US',{month:'long',year:'numeric'});
+let W=ld('mgr_wb2',null);
+if(!W){const o=ld('mgr_wb',null);W={a:0,sheets:o?o.sheets.map(s=>({n:s.n,a:0,secs:[{n:'All data',h:s.h,r:s.r}]})):[{n:'Closed Deal Report',a:0,secs:[{n:mon,h:['Name','Business/FB Page','Sales Representative','New','Renewal','Concept Ad'],r:[]}]}]}}
+const save=()=>sv('mgr_wb2',W),cur=()=>W.sheets[W.a],sec=()=>cur().secs[cur().a];
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-$('#ex').onclick=()=>{const d=D[$('#ds').value];if(!d)return;const t=[d.h,...d.r].map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download=$('#ds').value+'.csv';a.click()};
+function chips(el,list,a,cls,fn){el.innerHTML='';list.forEach((x,i)=>{const b=document.createElement('button');b.className='chip '+cls+(i===a?' on':'');b.textContent=x.n;b.onclick=()=>{fn(i);save();table()};el.append(b)})}
+function table(){chips($('#tabs'),W.sheets,W.a,'',i=>W.a=i);chips($('#stabs'),cur().secs,cur().a,'s',i=>cur().a=i);const s=sec();
+$('#sn').textContent=cur().n.toUpperCase();$('#ttl').textContent=cur().n+' › '+s.n;
+const cnt=w=>s.r.filter(r=>r.some(c=>(c||'').trim().toLowerCase()===w)).length;
+$('#si').innerHTML='<span>'+s.r.length+' rows</span>'+(cnt('new')?'<span>New: '+cnt('new')+'</span>':'')+(cnt('renewal')?'<span>Renewal: '+cnt('renewal')+'</span>':'');
+$('#tb').innerHTML='<tr><th>#</th>'+s.h.map((x,i)=>`<th contenteditable data-hc="${i}">${esc(x)}</th>`).join('')+'</tr>'+s.r.map((r,n)=>`<tr><td><button class="x" data-del="${n}">✕</button> ${n+1}</td>`+s.h.map((_,i)=>`<td contenteditable data-r="${n}" data-c="${i}">${esc(r[i]||'')}</td>`).join('')+'</tr>').join('')}
+$('#tb').addEventListener('focusout',e=>{const d=e.target.dataset,s=sec();if(d.hc!==undefined)s.h[+d.hc]=e.target.textContent;else if(d.r!==undefined){const r=s.r[+d.r];while(r.length<=+d.c)r.push('');r[+d.c]=e.target.textContent}else return;save()});
+$('#tb').addEventListener('click',e=>{const i=e.target.dataset.del;if(i!==undefined&&confirm('Delete this row?')){sec().r.splice(+i,1);save();table()}});
+$('#ar').onclick=()=>{const s=sec();s.r.push(s.h.map(()=>''));save();table()};
+$('#ac').onclick=()=>{const n=prompt('New column name');if(!n)return;const s=sec();s.h.push(n);s.r.forEach(r=>r.push(''));save();table()};
+const COLS='Name,Business/FB Page,Sales Representative,Status,Notes';
+$('#ns').onclick=()=>{const n=prompt('Sheet name (example: Closed Deal Report)');if(!n)return;const m=prompt('First section name (example: '+mon+')',mon);if(!m)return;const h=prompt('Column names, separated by commas',COLS);if(!h)return;W.sheets.push({n,a:0,secs:[{n:m,h:h.split(',').map(x=>x.trim()),r:[]}]});W.a=W.sheets.length-1;save();table()};
+$('#nsec').onclick=()=>{const n=prompt('Section name (example: December 2026)');if(!n)return;let h=[...sec().h];if(!confirm('Use the same columns as the current section?\nOK = same columns, Cancel = type new columns')){const t=prompt('Column names, separated by commas',COLS);if(!t)return;h=t.split(',').map(x=>x.trim())}cur().secs.push({n,h,r:[]});cur().a=cur().secs.length-1;save();table()};
+$('#rn').onclick=()=>{const n=prompt('Rename sheet',cur().n);if(n){cur().n=n;save();table()}};
+$('#rsec').onclick=()=>{const n=prompt('Rename section',sec().n);if(n){sec().n=n;save();table()}};
+$('#ds2').onclick=()=>{if(W.sheets.length<2){alert('Keep at least one sheet.');return}if(confirm('Delete sheet "'+cur().n+'" with ALL its sections and rows?')){W.sheets.splice(W.a,1);W.a=0;save();table()}};
+$('#dsec').onclick=()=>{if(cur().secs.length<2){alert('A sheet needs at least one section.');return}if(confirm('Delete section "'+sec().n+'" and all its rows?')){cur().secs.splice(cur().a,1);cur().a=0;save();table()}};
+function imp(rows){if(!rows.length)return;const s=sec();if(s.r.length&&!confirm('OK = add rows to this section. Cancel = replace this section\'s data.')){s.h=rows[0];s.r=rows.slice(1)}else{if(!s.r.length)s.h=rows[0];s.r.push(...rows.slice(1))}save();table()}
+$('#fi').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>imp(csv(String(r.result)));r.readAsText(f);e.target.value=''};
+$('#pb2').onclick=()=>{const t=$('#ps').value.trim();if(!t)return;const rows=t.split(/\r?\n/).map(l=>l.split('\t'));if(!rows.some(r=>r.length>1)){alert('Copy the cells directly from Google Sheets so the columns are kept.');return}imp(rows);$('#ps').value=''};
+$('#ex').onclick=()=>{const s=sec(),t=[s.h,...s.r].map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download=cur().n+' - '+s.n+'.csv';a.click()};
+function find(){const q=$('#q').value.trim().toLowerCase(),o=$('#sr');if(!q){o.innerHTML='';return}let n=0,h='';W.sheets.forEach((sh,si)=>sh.secs.forEach((s,ci)=>s.r.forEach(r=>{if(r.join(' ').toLowerCase().includes(q)){n++;h+=`<tr data-s="${si}" data-c="${ci}" style="cursor:pointer"><td><b>${esc(sh.n)} › ${esc(s.n)}</b></td><td>${esc(r.join(' | '))}</td></tr>`}})));o.innerHTML=`<div class="sub" style="margin:10px 0 6px">${n} result(s). Tap a row to open it.</div><div class="sc" style="max-height:260px;overflow:auto"><table>${h}</table></div>`}
+$('#sb').onclick=find;$('#q').onkeydown=e=>{if(e.key==='Enter')find()};$('#sx').onclick=()=>{$('#q').value='';$('#sr').innerHTML=''};
+$('#sr').onclick=e=>{const tr=e.target.closest('tr');if(tr&&tr.dataset.s){W.a=+tr.dataset.s;cur().a=+tr.dataset.c;save();table();window.scrollTo(0,0)}};
+function tick(){$('#clk').textContent=new Date().toLocaleTimeString('en-PH',{hour:'numeric',minute:'2-digit',second:'2-digit'})}
+tick();setInterval(tick,1000);
 $('#gr').onclick=()=>{const u=all('m').concat(all('a')).filter(x=>!S.done[x.id]).map(x=>'- '+x.t);
 $('#ro').value=`DAILY TEAM REPORT - ${$('#dt').textContent}\n\nAttendance: ${$('#at').value||0} present, ${$('#ab').value||0} absent\nNew clients today: ${$('#nc').value||0}\nMorning tasks: ${pct('m')}% | Afternoon tasks: ${pct('a')}%\n\nNOTES / CONCERNS / IMPROVEMENTS:\n${$('#rt').value||'-'}\n\nPENDING TASKS:\n${u.length?u.join('\n'):'None, all done'}`};
 $('#cp').onclick=()=>{$('#ro').select();try{document.execCommand('copy')}catch(e){}};
