@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Manager Daily System</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#1d2430;--mu:#667085;--ac:#0f766e;--bd:#e3e6ea;--ok:#16a34a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#14181f;--card:#1d232d;--tx:#e8ebf0;--mu:#98a2b3;--ac:#2dd4bf;--bd:#2d3542}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}
+.w{max-width:980px;margin:0 auto;padding:16px}
+h1{font-size:20px;margin:0}.sub{color:var(--mu);font-size:13px}
+nav{display:flex;gap:6px;margin:14px 0;flex-wrap:wrap}
+button,select,input{font:inherit;color:var(--tx)}
+nav button{padding:8px 14px;border:1px solid var(--bd);background:var(--card);border-radius:8px;cursor:pointer}
+nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:14px}
+.bar{height:8px;background:var(--bd);border-radius:6px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+.t{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:1px solid var(--bd)}.t:first-of-type{border-top:0}
+.t input{margin-top:4px;width:18px;height:18px;accent-color:var(--ac);flex:none}.t.d span{text-decoration:line-through;color:var(--mu)}
+.t small{color:var(--mu)}.x{margin-left:auto;border:0;background:none;color:var(--mu);cursor:pointer}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.row input,.row select{padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--card);flex:1;min-width:140px}
+.b{padding:8px 14px;border:0;border-radius:8px;background:var(--ac);color:#fff;cursor:pointer}.b.g{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
+.sc{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:6px 8px;border-bottom:1px solid var(--bd);text-align:left;white-space:nowrap}th{color:var(--mu);position:sticky;top:0;background:var(--card)}
+.k{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:10px}.k div{background:var(--bg);border-radius:10px;padding:10px}.k b{font-size:22px;display:block}
+textarea{width:100%;min-height:220px;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--card);font:13px/1.5 ui-monospace,monospace}
+.mon{background:#fef3c7;color:#92400e;padding:8px 12px;border-radius:8px;margin-bottom:12px;font-size:14px}
+</style></head><body><div class="w">
+<h1>Manager Daily System</h1><div class="sub" id="dt"></div>
+<nav id="nav"><button data-p="today" class="on">Today</button><button data-p="clients">Clients &amp; Data</button><button data-p="report">Daily Report</button></nav>
+
+<section id="today"><div class="mon" id="mon" hidden>Monday: Team meeting at 11:00 AM.</div>
+<div class="card"><b>Overall progress</b> <span id="pt" class="sub"></span><div class="bar"><i id="pb"></i></div></div>
+<div class="card"><b>MORNING</b><div class="bar"><i id="bm"></i></div><div id="L_m"></div></div>
+<div class="card"><b>AFTERNOON</b><div class="bar"><i id="ba"></i></div><div id="L_a"></div></div>
+<div class="card"><div class="row"><select id="nl"><option value="m">Morning</option><option value="a">Afternoon</option></select><input id="nt" placeholder="Add a custom task for today"><button class="b" id="na">Add</button></div>
+<button class="b g" id="rs">Reset today's checklist</button></div></section>
+
+<section id="clients" hidden>
+<div class="card"><b>Upload / update data</b><div class="sub">In Google Sheets: File &rarr; Download &rarr; CSV. Then choose the file below. Uploading again replaces that dataset.</div>
+<div class="row" style="margin-top:8px"><select id="ds"><option value="closed">Closed Deal Clients (Name, Business, Sales Rep, New, Renewal)</option><option value="accounts">List of Clients (Ad Accounts)</option><option value="sheet1">Sheet 1 (first sheet)</option></select><input type="file" id="fi" accept=".csv,text/csv"></div><div class="sub" style="margin:8px 0 4px">Or copy the cells in Google Sheets (include the header row) and paste here. You can also type rows directly in the table below.</div><textarea id="ps" style="min-height:90px" placeholder="Paste cells here"></textarea><div class="row" style="margin-top:8px"><button class="b" id="pb2">Import pasted data</button><button class="b g" id="ar">+ Add row</button></div></div>
+<div class="card"><div class="k" id="kp"></div>
+<div class="row"><input id="q" placeholder="Search name, page, ID..."><select id="rp"><option value="">All sales reps</option></select><button class="b g" id="ex">Download CSV</button></div>
+<div class="sc" style="max-height:480px;overflow:auto"><table id="tb"></table></div></div></section>
+
+<section id="report" hidden><div class="card"><div class="sub">Auto-built from today's checklist and uploaded data. Add your notes, then copy and send to the Head.</div>
+<div class="row" style="margin-top:8px"><input id="nc" type="number" min="0" placeholder="New clients today"><input id="at" type="number" min="0" placeholder="Present employees"><input id="ab" type="number" min="0" placeholder="Absent employees"></div>
+<textarea id="rt" placeholder="Concerns, solutions, improvements, award candidates..."></textarea>
+<div class="row" style="margin-top:10px"><button class="b" id="gr">Build report</button><button class="b g" id="cp">Copy</button></div>
+<textarea id="ro" style="margin-top:6px"></textarea></div></section>
+</div>
+<script>
+const TASKS={m:[
+"Remind team to do attendance in SYSTEM and the messenger GC",
+"Call all employees to confirm who is reporting today",
+"Assign someone to clean the office (PCs, tables, floors)",
+"Lead a short prayer before starting work",
+"Open all necessary accounts on the PC to monitor team tasks",
+"Check SYSTEM: reports, tasks, running ads, deadlines, new clients, usage %",
+"Ask Sales how many new clients today; collect names and report to the Head",
+"Ask team about client concerns; resolve and give solutions",
+"Ask Sales which client meetings you can join to assist",
+"Stand and monitor the team; remind them of responsibilities",
+"Motivate the team; keep energy high",
+"Remind the team to update the system"],
+a:[
+"I-check ang team sa tanghali kung kompleto na sila",
+"Magdasal sa tanghali bago magsimula",
+"I-remind ang team: attendance sa SYSTEM at GC",
+"Kolektahin ang cellphone ng bawat empleyado",
+"I-monitor ang team kung maayos ang trabaho",
+"Ask team about client concerns; resolve and give solutions",
+"Monitor Product advertiser and check all results",
+"Plan strategies for Operations and Projects",
+"Check all pages: nasasagot ba lahat ng clients?",
+"Paalalahanan ang WEEKLY GOAL ng Company",
+"Gumawa ng paraan para ma-achieve ang weekly goal",
+"Tulungan ang team isa-isa na matuto at mag-grow",
+"I-check ang pending sa System; tapusin ayon sa deadline",
+"Abisuhan mag-report sa SYSTEM: New Client, Renewal, Referral, Daily Employee report",
+"Mag-interview ng bagong empleyado",
+"Ayusin ang Contract ng empleyado",
+"Kausapin ang empleyadong may problema (Company, Katrabaho, Policy)",
+"Sumama sa ZOOM/personal meetings; i-assist ang client action plan",
+"I-update ang content posting kapag kumpleto na ang isang buwan",
+"Tignan kung sino ang potential na tumanggap ng certificate/award",
+"Module video of Ad Training",
+"Create certificate for Ad Training",
+"List the buttons for Training Landing Page",
+"Gumawa ng daily report para sa buong araw ng team",
+"Report to the Head: working status ng team at improvements",
+"Tignan ang saksakan ng computers, aircon, electric fan bago umuwi",
+"Paalalahanan ang assigned cleaners na maglinis bago umuwi"]};
+const $=s=>document.querySelector(s),today=new Date().toISOString().slice(0,10);
+let S={date:today,done:{},custom:[]},D={closed:null,accounts:null};
+const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},ld=(k,f)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch(e){return f}};
+S=ld('mgr_day',S);if(S.date!==today)S={date:today,done:{},custom:[]};
+D=ld('mgr_data',D);
+$('#dt').textContent=new Date().toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+if(new Date().getDay()===1)$('#mon').hidden=false;
+const all=l=>TASKS[l].map((t,i)=>({id:l+i,t,l})).concat(S.custom.filter(c=>c.l===l));
+function pct(l){const a=all(l);return a.length?Math.round(a.filter(x=>S.done[x.id]).length/a.length*100):0}
+function draw(){['m','a'].forEach(l=>{const el=$('#L_'+l);el.innerHTML='';all(l).forEach(x=>{const d=document.createElement('div');d.className='t'+(S.done[x.id]?' d':'');
+const c=document.createElement('input');c.type='checkbox';c.checked=!!S.done[x.id];c.onchange=()=>{S.done[x.id]=c.checked;sv('mgr_day',S);draw()};
+const s=document.createElement('span');s.textContent=x.t;d.append(c,s);
+if(x.custom){const b=document.createElement('button');b.className='x';b.textContent='✕';b.onclick=()=>{S.custom=S.custom.filter(y=>y.id!==x.id);sv('mgr_day',S);draw()};d.append(b)}
+el.append(d)});$('#b'+l).style.width=pct(l)+'%'});
+const n=all('m').concat(all('a')),dn=n.filter(x=>S.done[x.id]).length;$('#pt').textContent=dn+' of '+n.length+' done';$('#pb').style.width=Math.round(dn/n.length*100)+'%'}
+$('#na').onclick=()=>{const v=$('#nt').value.trim();if(!v)return;const l=$('#nl').value;S.custom.push({id:'c'+Date.now(),t:v,l,custom:1});$('#nt').value='';sv('mgr_day',S);draw()};
+$('#rs').onclick=()=>{if(confirm("Reset today's checklist?")){S.done={};sv('mgr_day',S);draw()}};
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));['today','clients','report'].forEach(p=>$('#'+p).hidden=p!==b.dataset.p);if(b.dataset.p==='clients')table()});
+function csv(t){const r=[];let row=[],f='',q=false;for(let i=0;i<t.length;i++){const c=t[i];if(q){if(c==='"'&&t[i+1]==='"'){f+='"';i++}else if(c==='"')q=false;else f+=c}else if(c==='"')q=true;else if(c===','){row.push(f);f=''}else if(c==='\n'||c==='\r'){if(c==='\r'&&t[i+1]==='\n')i++;row.push(f);r.push(row);row=[];f=''}else f+=c}row.push(f);r.push(row);return r.filter(x=>x.some(y=>y.trim()))}
+$('#fi').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const rows=csv(String(r.result));D[$('#ds').value]={h:rows[0],r:rows.slice(1)};sv('mgr_data',D);table()};r.readAsText(f);e.target.value=''};
+$('#ds').onchange=()=>table();['#q','#rp'].forEach(s=>$(s).oninput=table);
+function ci(h,k){return h.findIndex(x=>x.toLowerCase().includes(k))}
+function table(){const d=D[$('#ds').value],tb=$('#tb');if(!d){tb.innerHTML='<tr><td>No data yet. Upload a CSV above.</td></tr>';$('#kp').innerHTML='';return}
+const ri=ci(d.h,'sales rep'),q=$('#q').value.toLowerCase(),rp=$('#rp').value;
+const reps=[...new Set(d.r.map(x=>(x[ri]||'').trim()).filter(Boolean))].sort(),cur=$('#rp').value;
+$('#rp').innerHTML='<option value="">All sales reps</option>'+reps.map(x=>`<option${x===cur?' selected':''}>${esc(x)}</option>`).join('');
+let rows=d.r.filter(x=>(!q||x.join(' ').toLowerCase().includes(q))&&(!rp||(x[ri]||'').trim()===rp));
+let k=`<div><b>${rows.length}</b>Rows</div>`;
+if($('#ds').value==='closed'){const ni=ci(d.h,'new'),rn=ci(d.h,'renewal'),n=rows.filter(x=>(x[ni]||'').trim()).length,e=rows.filter(x=>(x[rn]||'').trim()).length;k+=`<div><b>${n}</b>New</div><div><b>${e}</b>Renewal</div><div><b>${n+e?Math.round(e/(n+e)*100):0}%</b>Renewal rate</div>`}
+else{const si=d.h.findIndex(x=>/not renew/i.test(x));const nr=rows.filter(x=>x.join(' ').toLowerCase().includes('not renew')).length;k+=`<div><b>${nr}</b>Not renewing</div>`}
+$('#kp').innerHTML=k;tb.innerHTML='<tr><th></th>'+d.h.map(x=>`<th>${esc(x)}</th>`).join('')+'</tr>'+rows.map(x=>{const n=d.r.indexOf(x);return `<tr><td><button class="x" data-del="${n}">✕</button></td>`+d.h.map((_,i)=>`<td contenteditable data-r="${n}" data-c="${i}">${esc(x[i]||'')}</td>`).join('')+'</tr>'}).join('')}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+$('#ex').onclick=()=>{const d=D[$('#ds').value];if(!d)return;const t=[d.h,...d.r].map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download=$('#ds').value+'.csv';a.click()};
+$('#gr').onclick=()=>{const u=all('m').concat(all('a')).filter(x=>!S.done[x.id]).map(x=>'- '+x.t);
+$('#ro').value=`DAILY TEAM REPORT - ${$('#dt').textContent}\n\nAttendance: ${$('#at').value||0} present, ${$('#ab').value||0} absent\nNew clients today: ${$('#nc').value||0}\nMorning tasks: ${pct('m')}% | Afternoon tasks: ${pct('a')}%\n\nNOTES / CONCERNS / IMPROVEMENTS:\n${$('#rt').value||'-'}\n\nPENDING TASKS:\n${u.length?u.join('\n'):'None, all done'}`};
+$('#cp').onclick=()=>{$('#ro').select();try{document.execCommand('copy')}catch(e){}};
+$('#tb').addEventListener('focusout',e=>{const c=e.target.dataset;if(c&&c.r!==undefined){D[$('#ds').value].r[+c.r][+c.c]=e.target.textContent;sv('mgr_data',D)}});
+$('#tb').addEventListener('click',e=>{const i=e.target.dataset&&e.target.dataset.del;if(i===undefined)return;if(confirm('Delete this row?')){D[$('#ds').value].r.splice(+i,1);sv('mgr_data',D);table()}});
+$('#pb2').onclick=()=>{const t=$('#ps').value.trim();if(!t)return;const rows=t.split(/\r?\n/).map(l=>l.split('\t'));if(!rows.some(r=>r.length>1)){alert('Copy the cells directly from Google Sheets so the columns are kept.');return}const k=$('#ds').value;if(D[k]&&confirm('OK = add these rows to the existing data. Cancel = replace all existing data.')){D[k].r.push(...rows.slice(1))}else D[k]={h:rows[0],r:rows.slice(1)};sv('mgr_data',D);$('#ps').value='';table()};
+$('#ar').onclick=()=>{const k=$('#ds').value;if(!D[k]){const h=prompt('Column names, separated by commas (example: Name,Business,Sales Representative,New,Renewal)');if(!h)return;D[k]={h:h.split(',').map(x=>x.trim()),r:[]}}D[k].r.push(D[k].h.map(()=>''));sv('mgr_data',D);table()};
+draw();
+</script></body></html>
