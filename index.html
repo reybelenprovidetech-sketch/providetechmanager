@@ -4,7 +4,7 @@
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0b1120;--card:#151e2e;--tx:#e5e9f0;--mu:#94a3b8;--bd:#263247;--sh:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.3)}}
 *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 "Inter",system-ui,-apple-system,Segoe UI,sans-serif}
-.w{max-width:1020px;margin:0 auto;padding:16px}
+.w{max-width:none;width:100%;margin:0;padding-block:16px;padding-left:max(clamp(16px,2.5vw,48px),env(safe-area-inset-left,0px));padding-right:max(clamp(16px,2.5vw,48px),env(safe-area-inset-right,0px))}
 .hero{background:linear-gradient(135deg,#0f766e 0%,#4f46e5 100%);color:#fff;border-radius:18px;padding:20px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:var(--sh)}
 h1{font-size:20px;margin:0;letter-spacing:-.01em}.hero .sub{color:rgba(255,255,255,.85)}
 #clk{font-size:38px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em;background:rgba(255,255,255,.15);padding:6px 18px;border-radius:14px}
@@ -115,6 +115,7 @@ nav button.on,.chip.on{background:linear-gradient(135deg,var(--ac),var(--ac2));b
 #spv{margin-bottom:10px}#sprev{display:block;margin:0 auto;width:100%;border:1px solid var(--bd);border-radius:10px;background:#fff;box-shadow:var(--sh)}
 @media(max-width:640px){#L_t .t{grid-template-columns:1fr 124px 26px}#L_t .t .tw{grid-column:1/-1}.th2{display:none}}
 [hidden]{display:none!important}.gate{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;background:var(--bg);overflow:auto}#dlg{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,.6)}
+.gwrap{display:flex;gap:24px;flex-wrap:wrap;align-items:center;margin-top:10px}.gleg{display:flex;flex-direction:column;gap:6px;font-size:14px}.gleg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:8px;vertical-align:-1px}.greps{flex:1;min-width:min(100%,260px)}.gr{margin-bottom:10px}.grh{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px}.grh span{color:var(--mu);font-variant-numeric:tabular-nums}.gb{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--bd);margin-top:4px}
 </style>
 <div class="gate" id="gate"><form class="card" id="gf" style="max-width:380px;width:100%;margin:0"><div class="ttl">Providetech Manager</div><div class="sub" style="margin-bottom:12px">Sign in to continue.</div><label class="sub" for="gu">Username<input class="in" id="gu" name="username" autocomplete="username" autocapitalize="off" spellcheck="false"></label><label class="sub" for="gp" style="display:block;margin-top:10px">Password<input class="in" id="gp" name="password" type="password" autocomplete="current-password"></label><label class="sub" for="gk" style="display:flex;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" id="gk" checked style="width:auto;margin:0"> Keep me signed in on this device</label><div id="ge" class="sub" style="color:#dc2626;min-height:18px;margin:8px 0" role="alert"></div><button class="b" type="submit" style="width:100%">Sign in</button></form></div><div class="w" id="app" hidden>
 <div class="hero"><div style="display:flex;align-items:center;gap:6px"><div class="cube"><i></i><i></i><i></i><i></i><i></i><i></i></div><div><h1>Providetech Manager</h1><div class="sub" id="dt"></div><div class="synb" id="syn">Local only</div></div></div><div style="display:flex;gap:10px;align-items:center"><div id="clk"></div><button id="thb" title="Theme and background" style="border:0;border-radius:12px;padding:10px 12px;font-size:20px;cursor:pointer;background:rgba(255,255,255,.2)">🎨</button><button id="lgo" title="Sign out" style="border:0;border-radius:12px;padding:10px 12px;font-size:14px;font-weight:600;cursor:pointer;background:rgba(255,255,255,.2);color:#fff">Sign out</button></div></div>
@@ -137,7 +138,7 @@ nav button.on,.chip.on{background:linear-gradient(135deg,var(--ac),var(--ac2));b
 <div class="card"><div class="lbl">GROUPS (e.g. months) IN <span id="sn"></span></div><div class="chips" id="stabs"></div>
 <div class="row"><button class="b" id="nsec">+ New group</button><button class="b g" id="rsec">Rename group</button><button class="b g" id="dsec">Delete group</button></div></div>
 <div class="card"><div class="row" style="margin:0"><input id="q" placeholder="Search names, pages, IDs across ALL sheets and sections..."><button class="b" id="sb">Search</button><button class="b g" id="sx">Clear</button></div><div id="sr"></div></div>
-<div class="card"><div class="ttl" id="ttl"></div><div class="k" id="si"></div>
+<div class="card"><div class="ttl" id="ttl"></div><div class="k" id="si"></div><div id="sg"></div>
 <div class="row"><select id="sf" style="padding:9px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);flex:none;max-width:100%"></select><button class="b" id="ar">+ Row</button><button class="b g" id="ac">+ Column</button><button class="b g" id="ex">Download CSV</button><label class="b g" style="cursor:pointer">Upload CSV<input type="file" id="fi" accept=".csv,text/csv" hidden></label></div>
 <div class="sub" style="margin-bottom:8px">Tap any cell or column title to type or edit. It saves automatically.</div>
 <div class="sc" style="max-height:480px;overflow:auto"><table id="tb"></table></div>
@@ -258,7 +259,7 @@ sf.innerHTML='<option value="">All sales ('+s.r.length+')</option>'+SALES.concat
 const rows=s.r.map((r,n)=>({r,n})).filter(o=>!SF||rv(o.r)===SF.toLowerCase());
 const isN=c=>/^\s*(new|closed \(new\))\s*$/i.test(c||''),isR=c=>/^\s*renewal\s*$/i.test(c||''),nn=rows.filter(o=>o.r.some(isN)).length,rr=rows.filter(o=>o.r.some(isR)).length,t=rows.length,pc=v=>(t?Math.round(v/t*1000)/10:0)+'%';
 $('#si').innerHTML=`<span>${t} rows</span>`+(nn||rr?`<span>New: ${nn} (${pc(nn)})</span><span>Renewal: ${rr} (${pc(rr)})</span>`:'')+(SF?`<span style="background:rgba(79,70,229,.14);color:var(--ac2)">${esc(SF)}</span>`:'')+(nn||rr?`<div style="flex-basis:100%;height:10px;border-radius:6px;overflow:hidden;display:flex;background:var(--bd)"><i style="width:${nn/t*100}%;background:#00e5ff"></i><i style="width:${rr/t*100}%;background:#94a3b8"></i></div>`:'');
-$('#tb').innerHTML='<tr class="ltr"><th></th>'+s.h.map((_,i)=>`<th>${L(i)}</th>`).join('')+'</tr><tr><th>#</th>'+s.h.map((x,i)=>`<th contenteditable data-hc="${i}"${sty((s.hf||[])[i],1)}>${esc(x)}</th>`).join('')+'</tr>'+rows.map(({r,n})=>`<tr><td><button class="x" data-del="${n}">\u2715</button> ${n+1}</td>`+s.h.map((_,i)=>`<td contenteditable data-r="${n}" data-c="${i}"${sty(((s.f||[])[n]||[])[i])}>${esc(r[i]||'')}</td>`).join('')+'</tr>').join('')}
+sgraph(s,rows,isN,isR,si);$('#tb').innerHTML='<tr class="ltr"><th></th>'+s.h.map((_,i)=>`<th>${L(i)}</th>`).join('')+'</tr><tr><th>#</th>'+s.h.map((x,i)=>`<th contenteditable data-hc="${i}"${sty((s.hf||[])[i],1)}>${esc(x)}</th>`).join('')+'</tr>'+rows.map(({r,n})=>`<tr><td><button class="x" data-del="${n}">\u2715</button> ${n+1}</td>`+s.h.map((_,i)=>`<td contenteditable data-r="${n}" data-c="${i}"${sty(((s.f||[])[n]||[])[i])}>${esc(r[i]||'')}</td>`).join('')+'</tr>').join('')}
 $('#sf').onchange=()=>{SF=$('#sf').value;table()};
 ONCE('focusout',e=>{const d=e.target.dataset,s=sec();if(d.hc!==undefined)s.h[+d.hc]=e.target.textContent;else if(d.r!==undefined){const r=s.r[+d.r];while(r.length<=+d.c)r.push('');r[+d.c]=e.target.textContent}else return;save()});
 ONCE('click',async e=>{const i=e.target.dataset.del;if(i!==undefined&&await ask('Delete this row?')){sec().r.splice(+i,1);if(sec().f)sec().f.splice(+i,1);save();table()}});
@@ -513,5 +514,16 @@ if(!h){er.textContent='Sign-in is not available in this browser.';return}
 if(h!==OK){er.textContent='Wrong username or password.';$('#gp').value='';$('#gp').focus();return}
 try{(($('#gk').checked?localStorage:sessionStorage)).setItem('auth_ok',OK)}catch(x){}er.textContent='';enter()});
 $('#lgo').onclick=leave})();
+
+/* ===== NEW vs RENEWAL GRAPH (sub sections) ===== */
+function sgraph(s,rows,isN,isR,si){const el=$('#sg');if(!el)return;const t=rows.length,nn=rows.filter(o=>o.r.some(isN)).length,rr=rows.filter(o=>o.r.some(isR)).length;
+if(!t||!(nn||rr)){el.innerHTML='';return}
+const r1=v=>Math.round(v*10)/10,p=v=>r1(v/t*100),C=2*Math.PI*40;let off=0;
+const seg=(v,col)=>{if(!v)return '';const l=v/t*C,h='<circle cx="60" cy="60" r="40" fill="none" stroke="'+col+'" stroke-width="18" stroke-dasharray="'+l+' '+(C-l)+'" stroke-dashoffset="'+(-off)+'" transform="rotate(-90 60 60)"/>';off+=l;return h};
+const ot=t-nn-rr,donut='<svg viewBox="0 0 120 120" width="150" height="150" role="img" aria-label="New '+p(nn)+'%, Renewal '+p(rr)+'%"><circle cx="60" cy="60" r="40" fill="none" stroke="var(--bd)" stroke-width="18"/>'+seg(nn,'#00e5ff')+seg(rr,'#94a3b8')+'<text x="60" y="60" text-anchor="middle" font-size="18" font-weight="700" fill="var(--tx)">'+p(nn)+'%</text><text x="60" y="75" text-anchor="middle" font-size="9" fill="var(--mu)">NEW</text></svg>';
+const leg='<div class="gleg"><span><i style="background:#00e5ff"></i>New: '+nn+' ('+p(nn)+'%)</span><span><i style="background:#94a3b8"></i>Renewal: '+rr+' ('+p(rr)+'%)</span>'+(ot>0?'<span><i style="background:var(--bd)"></i>Other: '+ot+' ('+p(ot)+'%)</span>':'')+'<span class="sub">'+t+' rows total</span></div>';
+let reps='';if(si>=0){const g={};rows.forEach(o=>{const k=(o.r[si]||'').trim()||'(no rep)',a=g[k]=g[k]||{t:0,n:0,r:0};a.t++;if(o.r.some(isN))a.n++;if(o.r.some(isR))a.r++});
+reps='<div class="greps">'+Object.entries(g).sort((a,b)=>b[1].t-a[1].t).map(([k,v])=>{const pn=v.n/v.t*100,pr=v.r/v.t*100;return '<div class="gr"><div class="grh"><b>'+esc(k)+'</b><span>'+v.t+' rows · New '+r1(pn)+'% · Renewal '+r1(pr)+'%</span></div><div class="gb"><i style="width:'+pn+'%;background:#00e5ff"></i><i style="width:'+pr+'%;background:#94a3b8"></i></div></div>'}).join('')+'</div>'}
+el.innerHTML='<div class="lbl" style="margin-top:14px">NEW VS RENEWAL (% OF ROWS)</div><div class="gwrap">'+donut+leg+reps+'</div>'}
 </script>
 </body></html>
