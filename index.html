@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Manager Daily System</title>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Providetech Manager</title>
 <style>:root{--bg:#eef2f7;--card:#fff;--tx:#0f172a;--mu:#64748b;--ac:#0d9488;--ac2:#4f46e5;--bd:#e2e8f0;--ok:#16a34a;--sh:0 1px 2px rgba(15,23,42,.06),0 10px 28px rgba(15,23,42,.07);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0b1120;--card:#151e2e;--tx:#e5e9f0;--mu:#94a3b8;--bd:#263247;--sh:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.3)}}
 *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -41,8 +41,60 @@ textarea{width:100%;min-height:220px;padding:10px;border:1px solid var(--bd);bor
 .kc h4{margin:0 0 10px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;display:flex;justify-content:space-between}
 .cd{background:var(--bg);border-radius:10px;padding:9px 10px;margin-bottom:8px;cursor:grab;border-left:4px solid var(--ac);font-size:13px}.cd b{display:block}.cd small{color:var(--mu)}
 .ttl{font-size:17px;font-weight:700}.k{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 0}.k span{background:rgba(13,148,136,.12);color:var(--ac);padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600}
+
+/* ===== FUTURISTIC 3D LAYER ===== */
+body{background:var(--bg);background-attachment:fixed;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(620px 420px at 10% 6%,rgba(34,211,238,.22),transparent 60%),radial-gradient(720px 520px at 92% 18%,rgba(168,85,247,.2),transparent 60%),linear-gradient(rgba(125,150,200,.09) 1px,transparent 1px) 0 0/46px 46px,linear-gradient(90deg,rgba(125,150,200,.09) 1px,transparent 1px) 0 0/46px 46px}
+.w{perspective:1400px}
+.hero,.card,.kc{transform:perspective(1000px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease,box-shadow .25s ease,border-color .25s}
+.hero{background:linear-gradient(135deg,#06b6d4 0%,#4f46e5 55%,#c026d3 100%);border:1px solid rgba(255,255,255,.35);box-shadow:0 30px 50px -22px rgba(79,70,229,.7),0 0 40px -6px rgba(34,211,238,.5),inset 0 1px 0 rgba(255,255,255,.5)}
+h1{text-transform:uppercase;letter-spacing:.06em;font-size:19px;text-shadow:0 0 14px rgba(255,255,255,.55),0 3px 0 rgba(0,0,0,.2)}
+#clk{font-family:ui-monospace,"SF Mono",Consolas,monospace;text-shadow:0 0 12px #67e8f9;background:rgba(0,0,0,.28);border:1px solid rgba(103,232,249,.6);box-shadow:inset 0 0 18px rgba(103,232,249,.25),0 8px 0 rgba(0,0,0,.2)}
+.cube{width:44px;height:44px;position:relative;transform-style:preserve-3d;animation:spin 14s linear infinite;margin:6px 14px 6px 8px;flex:none}
+.cube i{position:absolute;inset:0;border:2px solid rgba(255,255,255,.85);background:rgba(255,255,255,.12);box-shadow:inset 0 0 14px rgba(255,255,255,.5)}
+.cube i:nth-child(1){transform:translateZ(22px)}.cube i:nth-child(2){transform:rotateY(180deg) translateZ(22px)}.cube i:nth-child(3){transform:rotateY(90deg) translateZ(22px)}.cube i:nth-child(4){transform:rotateY(-90deg) translateZ(22px)}.cube i:nth-child(5){transform:rotateX(90deg) translateZ(22px)}.cube i:nth-child(6){transform:rotateX(-90deg) translateZ(22px)}
+@keyframes spin{from{transform:rotateX(-24deg) rotateY(0)}to{transform:rotateX(-24deg) rotateY(360deg)}}
+@media(prefers-reduced-motion:reduce){.cube{animation:none}}
+.card,.kc,nav{background:color-mix(in srgb,var(--card) 74%,transparent);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);border:1px solid rgba(34,211,238,.28);box-shadow:0 22px 40px -22px rgba(0,0,0,.55),0 0 24px -10px rgba(34,211,238,.45),inset 0 1px 0 rgba(255,255,255,.14)}
+.card:hover,.kc:hover{border-color:rgba(34,211,238,.6);box-shadow:0 28px 46px -22px rgba(0,0,0,.6),0 0 30px -6px rgba(34,211,238,.6),inset 0 1px 0 rgba(255,255,255,.2)}
+nav{border-radius:999px}
+nav button{transition:all .2s}nav button:hover{color:var(--tx);transform:translateY(-1px)}
+nav button.on,.chip.on{background:linear-gradient(135deg,#06b6d4,#4f46e5);box-shadow:0 0 18px rgba(34,211,238,.6),0 4px 0 rgba(0,0,0,.22)}
+.chip{transition:all .2s;box-shadow:0 3px 0 rgba(0,0,0,.12)}.chip:hover{transform:translateY(-2px)}
+.b{background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 5px 0 rgba(0,0,0,.28),0 12px 20px -8px var(--ac);transition:transform .12s,box-shadow .12s;text-shadow:0 1px 0 rgba(0,0,0,.25)}
+.b:hover{transform:translateY(-2px)}.b:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.28)}
+.b.g{text-shadow:none;box-shadow:0 4px 0 rgba(0,0,0,.14)}
+.bar{box-shadow:inset 0 2px 4px rgba(0,0,0,.3)}.bar i{background:linear-gradient(90deg,#22d3ee,#6366f1,#d946ef);box-shadow:0 0 14px rgba(34,211,238,.9)}
+.t{transition:transform .15s,background .15s}.t:hover{transform:translateX(5px) translateZ(0)}
+.cd{background:color-mix(in srgb,var(--bg) 70%,var(--card));box-shadow:0 6px 12px -6px rgba(0,0,0,.5);transition:transform .15s,box-shadow .15s}.cd:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 14px 20px -8px rgba(0,0,0,.6),0 0 14px -2px var(--ac)}
+.k span{box-shadow:0 0 10px -2px rgba(34,211,238,.5)}
+.row input:focus,textarea:focus,.in:focus{box-shadow:0 0 0 3px rgba(34,211,238,.25),0 0 16px rgba(34,211,238,.4)}
+.lbl{color:var(--ac)}
+#md .card{transform:none}
+/* attendance */
+.er{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 6px;border-top:1px solid var(--bd);font-size:16px}.er span{display:flex;gap:6px;align-items:center}
+.chip.s.pr.on{background:#16a34a;box-shadow:0 0 14px rgba(22,163,74,.7)}.chip.s.ab.on{background:#dc2626;box-shadow:0 0 14px rgba(220,38,38,.7)}
+
+/* ===== CALM + THEME-SYNCED OVERRIDES ===== */
+body::before{background:linear-gradient(rgba(125,150,200,.06) 1px,transparent 1px) 0 0/46px 46px,linear-gradient(90deg,rgba(125,150,200,.06) 1px,transparent 1px) 0 0/46px 46px}
+.hero,.card,.kc{transform:none!important;transition:none}
+.hero{background:linear-gradient(135deg,var(--ac),var(--ac2));border:1px solid rgba(255,255,255,.2);box-shadow:var(--sh)}
+h1{text-shadow:none;text-transform:none;letter-spacing:.01em;font-size:22px}
+#clk{text-shadow:none;box-shadow:none;border:1px solid rgba(255,255,255,.3)}
+.cube{animation:none;transform:rotateX(-24deg) rotateY(35deg)}
+.card,.kc,nav{box-shadow:var(--sh);border:1px solid var(--bd)}
+.card:hover,.kc:hover{border-color:var(--bd);box-shadow:var(--sh)}
+nav button:hover,.chip:hover,.b:hover,.b:active,.t:hover,.cd:hover{transform:none}
+.cd:hover{box-shadow:0 6px 12px -6px rgba(0,0,0,.4)}
+nav button.on,.chip.on{background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 3px 0 rgba(0,0,0,.15)}
+.bar i{background:linear-gradient(90deg,var(--ac),var(--ac2));box-shadow:none}
+.b{background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 3px 0 rgba(0,0,0,.2);text-shadow:none}
+.b.g{box-shadow:0 2px 0 rgba(0,0,0,.1)}
+.k span{box-shadow:none;background:color-mix(in srgb,var(--ac) 14%,transparent)}
+.row input:focus,textarea:focus,.in:focus{box-shadow:none}
+.chip.s.pr.on,.chip.s.ab.on{box-shadow:none}
 </style></head><body><div class="w">
-<div class="hero"><div><h1>Manager CRM &amp; Daily System</h1><div class="sub" id="dt"></div></div><div style="display:flex;gap:10px;align-items:center"><div id="clk"></div><button id="thb" title="Theme and background" style="border:0;border-radius:12px;padding:10px 12px;font-size:20px;cursor:pointer;background:rgba(255,255,255,.2)">🎨</button></div></div>
+<div class="hero"><div style="display:flex;align-items:center;gap:6px"><div class="cube"><i></i><i></i><i></i><i></i><i></i><i></i></div><div><h1>Providetech Manager</h1><div class="sub" id="dt"></div></div></div><div style="display:flex;gap:10px;align-items:center"><div id="clk"></div><button id="thb" title="Theme and background" style="border:0;border-radius:12px;padding:10px 12px;font-size:20px;cursor:pointer;background:rgba(255,255,255,.2)">🎨</button></div></div>
 <div class="card" id="thp" hidden style="margin-top:12px"><div class="lbl">MODE</div><div class="chips" id="thm"></div><div class="lbl" style="margin-top:12px">BACKGROUND COLOR</div><div class="chips" id="thc"></div></div>
 <nav id="nav"><button data-p="today" class="on">Today</button><button data-p="crm">CRM</button><button data-p="report">Daily Report</button></nav>
 
@@ -79,15 +131,20 @@ textarea{width:100%;min-height:220px;padding:10px;border:1px solid var(--bd);bor
 <label class="sub" style="display:block;margin-top:8px">Notes<textarea class="in" id="m_notes" style="min-height:70px;font-family:inherit"></textarea></label>
 <div class="lbl" style="margin-top:12px">ACTIVITY LOG</div><div class="row" style="margin:0"><input id="m_an" placeholder="Log a call, message or meeting..."><button class="b g" id="m_al">Add</button></div><div id="m_log"></div>
 <div class="row" style="margin-top:14px"><button class="b" id="m_save">Save</button><button class="b g" id="m_x">Close</button><button class="b g" id="m_del" style="margin-left:auto;color:#dc2626">Delete</button></div></div></div></section>
-<section id="report">
+<section id="report" hidden>
 <div class="card"><div class="lbl">REPORT DETAILS</div>
-<div class="row" style="margin-top:0"><label class="sub" style="flex:1;min-width:150px">Report date<input class="in" id="rd" type="date"></label><label class="sub" style="flex:2;min-width:180px">Prepared by<input class="in" id="rp" placeholder="Your name"></label></div>
-<div class="row"><input id="nc" type="number" min="0" placeholder="New clients today"><input id="at" type="number" min="0" placeholder="Present employees"><input id="ab" type="number" min="0" placeholder="Absent employees"></div>
+<div class="row" style="margin-top:0"><label class="sub" style="flex:1;min-width:150px">Report date<input class="in" id="rd" type="date"></label><label class="sub" style="flex:2;min-width:180px">Prepared by<input class="in" id="rp" placeholder="Your name"></label></div></div>
+<div class="chips" id="rtabs" style="margin-bottom:14px"><button class="chip on" data-v="d">Daily Report</button><button class="chip" data-v="a">Attendance Report</button></div>
+<div id="rv_d"><div class="card"><div class="row" style="margin-top:0"><input id="nc" type="number" min="0" placeholder="New clients today"><input id="at" type="number" min="0" placeholder="Present (auto if names added)"><input id="ab" type="number" min="0" placeholder="Absent (auto if names added)"></div>
 <textarea id="rt" style="min-height:80px" placeholder="Concerns, solutions, improvements, award candidates..."></textarea>
 <div class="row"><button class="b g" id="gr">Fill the report text from the checklist and notes</button></div></div>
 <div class="card"><div class="lbl">REPORT TEXT (type or edit freely)</div><textarea id="ro" style="min-height:260px" placeholder="Type your report here..."></textarea>
 <div class="row"><button class="b" id="dp">Download PDF</button><button class="b" id="di" style="background:var(--ac2)">Download image (PNG)</button><button class="b g" id="cp">Copy text</button></div><div class="sub" id="rm"></div></div>
-<div class="card"><div class="lbl">PREVIEW (today's date is printed at the top)</div><canvas id="rc" style="width:100%;max-width:520px;border:1px solid var(--bd);border-radius:10px;background:#fff"></canvas></div>
+<div class="card"><div class="lbl">PREVIEW (landscape report, date printed at the top)</div><canvas id="rc" style="width:100%;border:1px solid var(--bd);border-radius:10px;background:#fff"></canvas></div>
+</div>
+<div id="rv_a" hidden><div class="card"><div class="lbl">EMPLOYEE ATTENDANCE (for the report date)</div><div class="row" style="margin-top:0"><input id="en" placeholder="Employee name (or several, separated by commas)"><button class="b" id="ea">+ Add employee</button></div><div id="el"></div><div class="sub" id="es" style="margin-top:6px"></div></div>
+<div class="card"><div class="lbl">ATTENDANCE REPORT (separate from the daily report)</div><div class="row" style="margin:0"><button class="b" id="adp">Download PDF</button><button class="b" id="adi" style="background:var(--ac2)">Download image (PNG)</button></div></div>
+<div class="card"><div class="lbl">PREVIEW</div><canvas id="arc" style="width:100%;border:1px solid var(--bd);border-radius:10px;background:#fff"></canvas></div></div>
 </section>
 </div>
 <script>
@@ -235,10 +292,15 @@ const H=['Name','Business/FB Page','Sales Representative','Stage','Phone','Email
 W.sheets.push({n,a:0,secs:[{n:'All clients',h:H,hf:H.map(()=>({bg:'#274e13',fg:'#fff',al:'center'})),r:rows,f:fm}]});save();
 const clr=confirm('"'+n+'" was created with '+rows.length+' clients.\n\nOK = also EMPTY the pipeline now so you can start a new set.\nCancel = keep the pipeline as it is.');if(clr){CRM=[];cs()}crm()};
 $('#cc').onclick=()=>{if(CRM.length&&confirm('Delete all '+CRM.length+' clients from the pipeline? Move them to a sub section first if you want to keep them.')){CRM=[];cs();crm()}};
-const BG={light:[['Default',''],['Warm','#fbf3e4'],['Mint','#e6f4ec'],['Sky','#e4f0fb'],['Rose','#fbe9f0'],['Lavender','#eeeafb'],['White','#ffffff']],dark:[['Default',''],['Black','#000000'],['Forest','#0c1f17'],['Navy','#0a1633'],['Plum','#1a1026'],['Charcoal','#1c1f26']]};
+const BG={light:[['Default',''],['Warm','#fbf3e4'],['Mint','#e6f4ec'],['Sky','#e4f0fb'],['Rose','#fbe9f0'],['Lavender','#eeeafb'],['White','#ffffff'],['Peach','#fde8dc'],['Lemon','#fbf8dc'],['Aqua','#dcf7f5'],['Lilac','#f0e1fa'],['Slate','#dfe5ee'],['Aurora','linear-gradient(135deg,#dbeafe,#e9d5ff 50%,#fbcfe8)'],['Sunrise','linear-gradient(135deg,#fef3c7,#fecdd3)'],['Ocean','linear-gradient(135deg,#cffafe,#bfdbfe)'],['Meadow','linear-gradient(135deg,#d9f99d,#a7f3d0)']],dark:[['Default',''],['Black','#000000'],['Forest','#0c1f17'],['Navy','#0a1633'],['Plum','#1a1026'],['Charcoal','#1c1f26'],['Crimson','#220b12'],['Deep Teal','#06222a'],['Indigo','#12103a'],['Espresso','#1f1510'],['Cyber','linear-gradient(135deg,#0f0c29,#302b63 55%,#24243e)'],['Neon Sea','linear-gradient(135deg,#020617,#0c4a6e 60%,#134e4a)'],['Nebula','linear-gradient(135deg,#1e1b4b,#581c87 55%,#831843)'],['Matrix','linear-gradient(135deg,#000,#052e16)'],['Ember','linear-gradient(135deg,#1c1033,#7c2d12 130%)']]};
 let T=ld('mgr_theme',{m:'auto',l:'',d:''});
 const eff=()=>T.m==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):T.m;
-function theme(){const r=document.documentElement;if(T.m==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',T.m);const e=eff(),cur_=e==='dark'?T.d:T.l;cur_?r.style.setProperty('--bg',cur_):r.style.removeProperty('--bg');
+function tone(r,c,e){['--card','--bd','--tx','--mu','--ac','--ac2'].forEach(v=>r.style.removeProperty(v));if(c){const m=c.match(/#([0-9a-f]{6})/i);if(m){const n=parseInt(m[1],16),R=(n>>16&255)/255,G=(n>>8&255)/255,B=(n&255)/255,mx=Math.max(R,G,B),mn=Math.min(R,G,B),l=(mx+mn)/2,d=mx-mn;let h=0;if(d){h=mx===R?((G-B)/d)%6:mx===G?(B-R)/d+2:(R-G)/d+4;h=(h*60+360)%360}const sat=d?d/(1-Math.abs(2*l-1)):0,H=sat<.12?200:Math.round(h),dk=e==='dark',L=Math.round(l*100),p=(k,v)=>r.style.setProperty(k,v);
+p('--ac',`hsl(${H} ${dk?65:70}% ${dk?55:34}%)`);p('--ac2',`hsl(${(H+45)%360} ${dk?65:60}% ${dk?62:42}%)`);
+p('--card',dk?`hsl(${H} ${Math.min(35,Math.round(sat*100)+8)}% ${Math.min(24,L+8)}%)`:`hsl(${H} ${Math.min(60,Math.round(sat*100))}% 98%)`);
+p('--bd',dk?`hsl(${H} 22% ${Math.min(32,L+16)}%)`:`hsl(${H} 30% 84%)`);p('--tx',dk?`hsl(${H} 25% 92%)`:`hsl(${H} 40% 12%)`);p('--mu',dk?`hsl(${H} 15% 68%)`:`hsl(${H} 15% 38%)`)}}
+if(!$('#report').hidden)try{rep()}catch(x){}}
+function theme(){const r=document.documentElement;if(T.m==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',T.m);const e=eff(),cur_=e==='dark'?T.d:T.l;cur_?r.style.setProperty('--bg',cur_):r.style.removeProperty('--bg');tone(r,cur_,e);
 $('#thm').innerHTML='';[['auto','Auto'],['light','☀️ Light'],['dark','🌙 Dark']].forEach(([k,n])=>{const b=document.createElement('button');b.className='chip'+(T.m===k?' on':'');b.textContent=n;b.onclick=()=>{T.m=k;sv('mgr_theme',T);theme()};$('#thm').append(b)});
 $('#thc').innerHTML='';BG[e].forEach(([n,c])=>{const b=document.createElement('button');b.className='chip'+(cur_===c?' on':'');b.innerHTML=`<span style="display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:-2px;margin-right:6px;border:1px solid var(--bd);background:${c||(e==='dark'?'#0b1120':'#eef2f7')}"></span>${n}`;b.onclick=()=>{if(e==='dark')T.d=c;else T.l=c;sv('mgr_theme',T);theme()};$('#thc').append(b)})}
 $('#thb').onclick=()=>{$('#thp').hidden=!$('#thp').hidden};
@@ -257,26 +319,54 @@ document.addEventListener('paste',e=>{if(mode!=='pipe'||$('#crm').hidden||!$('#m
 async function saveFile(name,data){try{const d=window.claude&&claude.use?await claude.use('downloads'):null;if(d){await d.save({filename:name,data});return}}catch(e){if(e&&e.code==='declined')return}const a=document.createElement('a');a.href=URL.createObjectURL(data instanceof Blob?data:new Blob([data]));a.download=name;document.body.append(a);a.click();a.remove()}
 function mkPdf(pgs){const enc=new TextEncoder(),parts=[],xr=[];let off=0;const push=b=>{const u=typeof b==='string'?enc.encode(b):b;parts.push(u);off+=u.length};push('%PDF-1.4\n');const n=pgs.length,kids=pgs.map((_,i)=>(3+i*3)+' 0 R').join(' ');
 xr[1]=off;push('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');xr[2]=off;push(`2 0 obj\n<< /Type /Pages /Kids [${kids}] /Count ${n} >>\nendobj\n`);
-pgs.forEach((p,i)=>{const a=3+i*3,c=a+1,m=a+2,st='q 595 0 0 842 0 0 cm /Im0 Do Q';xr[a]=off;push(`${a} 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /XObject << /Im0 ${m} 0 R >> >> /Contents ${c} 0 R >>\nendobj\n`);xr[c]=off;push(`${c} 0 obj\n<< /Length ${st.length} >>\nstream\n${st}\nendstream\nendobj\n`);xr[m]=off;push(`${m} 0 obj\n<< /Type /XObject /Subtype /Image /Width ${p.w} /Height ${p.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${p.d.length} >>\nstream\n`);push(p.d);push('\nendstream\nendobj\n')});
+pgs.forEach((p,i)=>{const a=3+i*3,c=a+1,m=a+2,st='q 842 0 0 595 0 0 cm /Im0 Do Q';xr[a]=off;push(`${a} 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 842 595] /Resources << /XObject << /Im0 ${m} 0 R >> >> /Contents ${c} 0 R >>\nendobj\n`);xr[c]=off;push(`${c} 0 obj\n<< /Length ${st.length} >>\nstream\n${st}\nendstream\nendobj\n`);xr[m]=off;push(`${m} 0 obj\n<< /Type /XObject /Subtype /Image /Width ${p.w} /Height ${p.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${p.d.length} >>\nstream\n`);push(p.d);push('\nendstream\nendobj\n')});
 const xo=off,tot=3+n*3;let x=`xref\n0 ${tot}\n0000000000 65535 f \n`;for(let k=1;k<tot;k++)x+=String(xr[k]).padStart(10,'0')+' 00000 n \n';push(x+`trailer\n<< /Size ${tot} /Root 1 0 R >>\nstartxref\n${xo}\n%%EOF`);return new Blob(parts,{type:'application/pdf'})}
 const dstr=()=>new Date(($('#rd').value||today)+'T00:00:00').toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 let rdCur='';
 function repLoad(){rdCur=$('#rd').value;$('#ro').value=(ld('mgr_rep_'+rdCur,{t:''})||{}).t||'';$('#rp').value=ld('mgr_by','')||''}
 function repSave(){if(rdCur)sv('mgr_rep_'+rdCur,{t:$('#ro').value});sv('mgr_by',$('#rp').value)}
 function repLines(x,text,max){const out=[];text.split(/\r?\n/).forEach(p=>{if(!p.trim()){out.push('');return}let l='';p.split(' ').forEach(w=>{const t=l?l+' '+w:w;if(l&&x.measureText(t).width>max){out.push(l);l=w}else l=t});out.push(l)});return out}
-function repCanvas(){const W=1588,ph=Math.round(W*842/595),pad=100,fs=30,lh=46,hh=300,F='"Segoe UI",Arial,sans-serif',c=document.createElement('canvas'),x=c.getContext('2d');x.font=fs+'px '+F;const ls=repLines(x,$('#ro').value,W-2*pad),H=Math.ceil((hh+70+ls.length*lh+90)/ph)*ph;c.width=W;c.height=H;x.fillStyle='#fff';x.fillRect(0,0,W,H);
-const g=x.createLinearGradient(0,0,W,hh);g.addColorStop(0,'#0f766e');g.addColorStop(1,'#4f46e5');x.fillStyle=g;x.fillRect(0,0,W,hh);x.fillStyle='#fff';x.textBaseline='alphabetic';x.font='700 56px '+F;x.fillText('DAILY REPORT',pad,125);x.font='600 42px '+F;x.fillText(dstr(),pad,192);const by=$('#rp').value.trim();if(by){x.font='28px '+F;x.fillText('Prepared by: '+by,pad,246)}
-x.fillStyle='#0f172a';let y=hh+80;ls.forEach(l=>{const h=/:\s*$/.test(l.trim())&&l.length<50||/^[A-Z0-9 \/&()#-]{4,}$/.test(l.trim());x.font=(h?'700 ':'')+fs+'px '+F;x.fillText(l,pad,y);y+=lh});return c}
-function rep(){if(!$('#rd').value){$('#rd').value=today;repLoad()}const c=repCanvas(),v=$('#rc');v.width=c.width/2;v.height=c.height/2;v.getContext('2d').drawImage(c,0,0,v.width,v.height)}
+const PW=1754,PH=1240,FF='"Segoe UI",Arial,sans-serif';
+let EMP=ld('mgr_emp',[]);
+const attK=()=>'mgr_att_'+($('#rd').value||today);
+function attC(){const a=ld(attK(),{}),pn=EMP.filter(n=>(a[n]||'P')==='P'),an=EMP.filter(n=>a[n]==='A');return EMP.length?{p:pn.length,a:an.length,pn,an}:{p:+$('#at').value||0,a:+$('#ab').value||0,pn:[],an:[]}}
+function attDraw(){const a=ld(attK(),{});$('#el').innerHTML=EMP.map((n,i)=>{const t=a[n]||'P';return `<div class="er"><b>${esc(n)}</b><span><button class="chip s pr${t==='P'?' on':''}" data-i="${i}" data-s="P">Present</button><button class="chip s ab${t==='A'?' on':''}" data-i="${i}" data-s="A">Absent</button><button class="x" data-rm="${i}" title="Remove employee">✕</button></span></div>`}).join('')||'<div class="sub">No employees yet. Type a name above and press Add.</div>';const k=attC();if(EMP.length){$('#at').value=k.p;$('#ab').value=k.a}$('#at').readOnly=$('#ab').readOnly=!!EMP.length;$('#es').textContent=EMP.length?k.p+' present · '+k.a+' absent':''}
+$('#el').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const k=attK(),a=ld(k,{});if(b.dataset.s){a[EMP[+b.dataset.i]]=b.dataset.s;sv(k,a)}else if(b.dataset.rm!==undefined){if(!confirm('Remove '+EMP[+b.dataset.rm]+' from the employee list?'))return;EMP.splice(+b.dataset.rm,1);sv('mgr_emp',EMP)}else return;rep()});
+function addEmp(){$('#en').value.split(/[,\n]/).map(x=>x.trim()).filter(Boolean).forEach(n=>{if(!EMP.some(x=>x.toLowerCase()===n.toLowerCase()))EMP.push(n)});sv('mgr_emp',EMP);$('#en').value='';rep()}
+$('#ea').onclick=addEmp;$('#en').onkeydown=e=>{if(e.key==='Enter')addEmp()};
+const rrect=(x,a,b,w,h,r)=>{x.beginPath();x.roundRect?x.roundRect(a,b,w,h,r):x.rect(a,b,w,h)};
+function repCanvas(){const cs_=getComputedStyle(document.documentElement),AC=cs_.getPropertyValue('--ac').trim()||'#4f46e5',AC2=cs_.getPropertyValue('--ac2').trim()||'#0891b2',c=document.createElement('canvas'),x=c.getContext('2d'),pad=90,fs=40,lh=60,I=[],k=attC(),nc=$('#nc').value||0,by=$('#rp').value.trim();let y=290;
+const need=h=>{if(y%PH+h>PH-80)y=(Math.floor(y/PH)+1)*PH+70};
+const cw=(PW-2*pad-60)/3,cy=y;[['PRESENT',k.p,'#16a34a'],['ABSENT',k.a,'#dc2626'],['NEW CLIENTS',nc,AC]].forEach(([l,v,col],i)=>{const cx=pad+i*(cw+30);I.push(()=>{rrect(x,cx,cy,cw,190,26);x.globalAlpha=.12;x.fillStyle=col;x.fill();x.globalAlpha=1;x.lineWidth=4;x.strokeStyle=col;x.stroke();x.fillStyle=col;x.font='800 34px '+FF;x.fillText(l,cx+36,cy+62);x.font='800 112px '+FF;x.fillText(String(v),cx+36,cy+165)})});y+=240;
+
+const tx=$('#ro').value.trim();if(tx){need(130);const y0=y;I.push(()=>{x.fillStyle=AC;x.fillRect(pad,y0,10,52);x.fillStyle='#0f172a';x.font='800 46px '+FF;x.fillText('REPORT',pad+28,y0+42)});y+=90;x.font='500 '+fs+'px '+FF;repLines(x,tx,PW-2*pad).forEach(l=>{if(!l.trim()){y+=lh*.5;return}need(lh);const yy=y,h=/:\s*$/.test(l.trim())&&l.length<50||/^[A-Z0-9 \/&()#-]{4,}$/.test(l.trim());I.push(()=>{x.font=(h?'800 ':'500 ')+fs+'px '+FF;x.fillStyle=h?AC:'#0f172a';x.fillText(l,pad,yy+fs)});y+=lh})}
+const n=Math.max(1,Math.ceil((y+60)/PH));c.width=PW;c.height=n*PH;x.fillStyle='#fff';x.fillRect(0,0,PW,c.height);
+const g=x.createLinearGradient(0,0,PW,230);g.addColorStop(0,'#0f172a');g.addColorStop(.55,AC2);g.addColorStop(1,AC);x.fillStyle=g;x.fillRect(0,0,PW,230);x.fillStyle='#fff';x.textBaseline='alphabetic';x.font='800 76px '+FF;x.fillText('DAILY REPORT',pad,102);x.font='700 44px '+FF;x.fillText(dstr(),pad,168);if(by){x.font='500 32px '+FF;x.fillText('Prepared by: '+by,pad,212)}
+I.forEach(f=>f());x.font='24px '+FF;x.fillStyle='#94a3b8';x.textAlign='right';for(let p=0;p<n;p++)x.fillText('Page '+(p+1)+' of '+n,PW-pad,PH*(p+1)-34);x.textAlign='left';return c}
+function attCanvas(){const cs_=getComputedStyle(document.documentElement),AC=cs_.getPropertyValue('--ac').trim()||'#4f46e5',AC2=cs_.getPropertyValue('--ac2').trim()||'#0891b2',c=document.createElement('canvas'),x=c.getContext('2d'),pad=90,k=attC(),by=$('#rp').value.trim(),I=[];let y=290;
+const need=h=>{if(y%PH+h>PH-80)y=(Math.floor(y/PH)+1)*PH+70};
+const cw=(PW-2*pad-60)/3,cy=y;[['PRESENT',k.p,'#16a34a'],['ABSENT',k.a,'#dc2626'],['TOTAL',k.p+k.a,AC]].forEach(([l,v,col],i)=>{const cx=pad+i*(cw+30);I.push(()=>{rrect(x,cx,cy,cw,190,26);x.globalAlpha=.12;x.fillStyle=col;x.fill();x.globalAlpha=1;x.lineWidth=4;x.strokeStyle=col;x.stroke();x.fillStyle=col;x.font='800 34px '+FF;x.fillText(l,cx+36,cy+62);x.font='800 112px '+FF;x.fillText(String(v),cx+36,cy+165)})});y+=240;
+if(!EMP.length){I.push(()=>{x.fillStyle='#64748b';x.font='600 42px '+FF;x.fillText('No employees added yet.',pad,cy+290)});y+=120}
+else{const half=(PW-2*pad)/2;need(140);const y0=y;[['PRESENT',k.pn,'#16a34a',pad],['ABSENT',k.an,'#dc2626',pad+half]].forEach(([t,l,col,px])=>I.push(()=>{x.fillStyle=col;x.font='800 52px '+FF;x.fillText(t+' ('+l.length+')',px,y0+50);x.fillRect(px,y0+70,half-50,6)}));y+=120;
+const mx=Math.max(k.pn.length,k.an.length,1);for(let i=0;i<mx;i++){need(66);const yy=y;I.push(()=>{x.font='600 44px '+FF;[[k.pn,pad],[k.an,pad+half]].forEach(([l,px])=>{if(i<l.length){x.fillStyle='#0f172a';x.fillText((i+1)+'. '+l[i],px,yy+44,half-70)}else if(!l.length&&i===0){x.fillStyle='#64748b';x.fillText('None',px,yy+44)}})});y+=66}}
+const n=Math.max(1,Math.ceil((y+60)/PH));c.width=PW;c.height=n*PH;x.fillStyle='#fff';x.fillRect(0,0,PW,c.height);
+const g=x.createLinearGradient(0,0,PW,230);g.addColorStop(0,'#0f172a');g.addColorStop(.55,AC2);g.addColorStop(1,AC);x.fillStyle=g;x.fillRect(0,0,PW,230);x.fillStyle='#fff';x.textBaseline='alphabetic';x.font='800 76px '+FF;x.fillText('ATTENDANCE REPORT',pad,102);x.font='700 44px '+FF;x.fillText(dstr(),pad,168);if(by){x.font='500 32px '+FF;x.fillText('Prepared by: '+by,pad,212)}
+I.forEach(f=>f());x.font='24px '+FF;x.fillStyle='#94a3b8';x.textAlign='right';for(let q=0;q<n;q++)x.fillText('Page '+(q+1)+' of '+n,PW-pad,PH*(q+1)-34);x.textAlign='left';return c}
+function arep(){if($('#rv_a').hidden)return;const c=attCanvas(),v=$('#arc');v.width=c.width/2;v.height=c.height/2;v.getContext('2d').drawImage(c,0,0,v.width,v.height)}
+const toPdf=async(c,name)=>{const w=c.width,n=Math.round(c.height/PH),pgs=[];for(let i=0;i<n;i++){const pc=document.createElement('canvas');pc.width=w;pc.height=PH;pc.getContext('2d').drawImage(c,0,i*PH,w,PH,0,0,w,PH);const bin=atob(pc.toDataURL('image/jpeg',.92).split(',')[1]),u=new Uint8Array(bin.length);for(let q=0;q<bin.length;q++)u[q]=bin.charCodeAt(q);pgs.push({d:u,w:w,h:PH})}await saveFile(name,mkPdf(pgs))};
+$('#adp').onclick=()=>toPdf(attCanvas(),'Attendance Report '+$('#rd').value+'.pdf');
+$('#adi').onclick=()=>attCanvas().toBlob(b=>saveFile('Attendance Report '+$('#rd').value+'.png',b),'image/png');
+document.querySelectorAll('#rtabs .chip').forEach(b=>b.onclick=()=>{document.querySelectorAll('#rtabs .chip').forEach(z=>z.classList.toggle('on',z===b));$('#rv_d').hidden=b.dataset.v!=='d';$('#rv_a').hidden=b.dataset.v!=='a';rep()});
+ function rep(){attDraw();arep();if(!$('#rd').value){$('#rd').value=today;repLoad()}const c=repCanvas(),v=$('#rc');v.width=c.width/2;v.height=c.height/2;v.getContext('2d').drawImage(c,0,0,v.width,v.height)}
 let rtm;const rdeb=()=>{clearTimeout(rtm);rtm=setTimeout(()=>{repSave();rep()},250)};
-$('#ro').addEventListener('input',rdeb);$('#rp').addEventListener('input',rdeb);$('#gr').addEventListener('click',()=>setTimeout(rdeb,0));$('#rd').onchange=()=>{repSave();repLoad();rep()};
+$('#ro').addEventListener('input',rdeb);['#nc','#at','#ab'].forEach(q=>$(q).addEventListener('input',rdeb));$('#rp').addEventListener('input',rdeb);$('#gr').addEventListener('click',()=>setTimeout(rdeb,0));$('#rd').onchange=()=>{repSave();repLoad();rep()};
 $('#rd').value=today;repLoad();
-$('#dp').onclick=async()=>{const c=repCanvas(),W=c.width,ph=Math.round(W*842/595),n=Math.round(c.height/ph),pgs=[];for(let i=0;i<n;i++){const pc=document.createElement('canvas');pc.width=W;pc.height=ph;pc.getContext('2d').drawImage(c,0,i*ph,W,ph,0,0,W,ph);const bin=atob(pc.toDataURL('image/jpeg',.92).split(',')[1]),u=new Uint8Array(bin.length);for(let k=0;k<bin.length;k++)u[k]=bin.charCodeAt(k);pgs.push({d:u,w:W,h:ph})}await saveFile('Daily Report '+$('#rd').value+'.pdf',mkPdf(pgs))};
+$('#dp').onclick=async()=>{const c=repCanvas(),W=c.width,ph=PH,n=Math.round(c.height/ph),pgs=[];for(let i=0;i<n;i++){const pc=document.createElement('canvas');pc.width=W;pc.height=ph;pc.getContext('2d').drawImage(c,0,i*ph,W,ph,0,0,W,ph);const bin=atob(pc.toDataURL('image/jpeg',.92).split(',')[1]),u=new Uint8Array(bin.length);for(let k=0;k<bin.length;k++)u[k]=bin.charCodeAt(k);pgs.push({d:u,w:W,h:ph})}await saveFile('Daily Report '+$('#rd').value+'.pdf',mkPdf(pgs))};
 $('#di').onclick=()=>{repCanvas().toBlob(b=>saveFile('Daily Report '+$('#rd').value+'.png',b),'image/png')};
 function tick(){$('#clk').textContent=new Date().toLocaleTimeString('en-PH',{hour:'numeric',minute:'2-digit',second:'2-digit'})}
 tick();setInterval(tick,1000);
 $('#gr').onclick=()=>{const u=all('m').concat(all('a')).filter(x=>!S.done[x.id]).map(x=>'- '+x.t);
-$('#ro').value=`Attendance: ${$('#at').value||0} present, ${$('#ab').value||0} absent\nNew clients today: ${$('#nc').value||0}\nMorning tasks: ${pct('m')}% | Afternoon tasks: ${pct('a')}%\n\nNOTES / CONCERNS / IMPROVEMENTS:\n${$('#rt').value||'-'}\n\nPENDING TASKS:\n${u.length?u.join('\n'):'None, all done'}`};
+$('#ro').value=`Morning tasks: ${pct('m')}% | Afternoon tasks: ${pct('a')}%\n\nNOTES / CONCERNS / IMPROVEMENTS:\n${$('#rt').value||'-'}\n\nPENDING TASKS:\n${u.length?u.join('\n'):'None, all done'}`};
 $('#cp').onclick=()=>{$('#ro').select();try{document.execCommand('copy')}catch(e){}};
 draw();
 </script></body></html>
