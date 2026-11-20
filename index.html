@@ -60,7 +60,7 @@ textarea{width:100%;min-height:220px;padding:10px;border:1px solid var(--bd);bor
 <div class="row"><button class="b" id="nsec">+ New group</button><button class="b g" id="rsec">Rename group</button><button class="b g" id="dsec">Delete group</button></div></div>
 <div class="card"><div class="row" style="margin:0"><input id="q" placeholder="Search names, pages, IDs across ALL sheets and sections..."><button class="b" id="sb">Search</button><button class="b g" id="sx">Clear</button></div><div id="sr"></div></div>
 <div class="card"><div class="ttl" id="ttl"></div><div class="k" id="si"></div>
-<div class="row"><button class="b" id="ar">+ Row</button><button class="b g" id="ac">+ Column</button><button class="b g" id="ex">Download CSV</button><label class="b g" style="cursor:pointer">Upload CSV<input type="file" id="fi" accept=".csv,text/csv" hidden></label></div>
+<div class="row"><select id="sf" style="padding:9px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);flex:none;max-width:100%"></select><button class="b" id="ar">+ Row</button><button class="b g" id="ac">+ Column</button><button class="b g" id="ex">Download CSV</button><label class="b g" style="cursor:pointer">Upload CSV<input type="file" id="fi" accept=".csv,text/csv" hidden></label></div>
 <div class="sub" style="margin-bottom:8px">Tap any cell or column title to type or edit. It saves automatically.</div>
 <div class="sc" style="max-height:480px;overflow:auto"><table id="tb"></table></div>
 <details open style="margin-top:12px"><summary class="sub" style="cursor:pointer">Paste from Google Sheets</summary><div class="sub" style="margin:6px 0"><b>Fast way:</b> click any cell in the table above and press Ctrl+V (Cmd+V on Mac). The copied block lands in the grid starting at that cell, with the same rows and columns as in Google Sheets. <b>Or</b> paste the whole sheet below and import it.</div><textarea id="ps" style="min-height:90px" placeholder="In Google Sheets: select the cells (Ctrl+A), copy (Ctrl+C), then paste here"></textarea><div class="row" style="align-items:center"><label class="sub"><input type="checkbox" id="hd" checked style="min-width:0;flex:none"> First row = column titles</label><button class="b" id="pb2">Import into this section</button></div></details></div></section>
@@ -79,11 +79,16 @@ textarea{width:100%;min-height:220px;padding:10px;border:1px solid var(--bd);bor
 <label class="sub" style="display:block;margin-top:8px">Notes<textarea class="in" id="m_notes" style="min-height:70px;font-family:inherit"></textarea></label>
 <div class="lbl" style="margin-top:12px">ACTIVITY LOG</div><div class="row" style="margin:0"><input id="m_an" placeholder="Log a call, message or meeting..."><button class="b g" id="m_al">Add</button></div><div id="m_log"></div>
 <div class="row" style="margin-top:14px"><button class="b" id="m_save">Save</button><button class="b g" id="m_x">Close</button><button class="b g" id="m_del" style="margin-left:auto;color:#dc2626">Delete</button></div></div></div></section>
-<section id="report" hidden><div class="card"><div class="sub">Auto-built from today's checklist and uploaded data. Add your notes, then copy and send to the Head.</div>
-<div class="row" style="margin-top:8px"><input id="nc" type="number" min="0" placeholder="New clients today"><input id="at" type="number" min="0" placeholder="Present employees"><input id="ab" type="number" min="0" placeholder="Absent employees"></div>
-<textarea id="rt" placeholder="Concerns, solutions, improvements, award candidates..."></textarea>
-<div class="row" style="margin-top:10px"><button class="b" id="gr">Build report</button><button class="b g" id="cp">Copy</button></div>
-<textarea id="ro" style="margin-top:6px"></textarea></div></section>
+<section id="report">
+<div class="card"><div class="lbl">REPORT DETAILS</div>
+<div class="row" style="margin-top:0"><label class="sub" style="flex:1;min-width:150px">Report date<input class="in" id="rd" type="date"></label><label class="sub" style="flex:2;min-width:180px">Prepared by<input class="in" id="rp" placeholder="Your name"></label></div>
+<div class="row"><input id="nc" type="number" min="0" placeholder="New clients today"><input id="at" type="number" min="0" placeholder="Present employees"><input id="ab" type="number" min="0" placeholder="Absent employees"></div>
+<textarea id="rt" style="min-height:80px" placeholder="Concerns, solutions, improvements, award candidates..."></textarea>
+<div class="row"><button class="b g" id="gr">Fill the report text from the checklist and notes</button></div></div>
+<div class="card"><div class="lbl">REPORT TEXT (type or edit freely)</div><textarea id="ro" style="min-height:260px" placeholder="Type your report here..."></textarea>
+<div class="row"><button class="b" id="dp">Download PDF</button><button class="b" id="di" style="background:var(--ac2)">Download image (PNG)</button><button class="b g" id="cp">Copy text</button></div><div class="sub" id="rm"></div></div>
+<div class="card"><div class="lbl">PREVIEW (today's date is printed at the top)</div><canvas id="rc" style="width:100%;max-width:520px;border:1px solid var(--bd);border-radius:10px;background:#fff"></canvas></div>
+</section>
 </div>
 <script>
 const TASKS={m:[
@@ -127,7 +132,7 @@ a:[
 "Report to the Head: working status ng team at improvements",
 "Tignan ang saksakan ng computers, aircon, electric fan bago umuwi",
 "Paalalahanan ang assigned cleaners na maglinis bago umuwi"]};
-const $=s=>document.querySelector(s),today=new Date().toISOString().slice(0,10);
+const $=s=>document.querySelector(s),today=(d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'))(new Date());
 let S={date:today,done:{},custom:[]},D={closed:null,accounts:null};
 const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},ld=(k,f)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch(e){return f}};
 S=ld('mgr_day',S);if(S.date!==today)S={date:today,done:{},custom:[]};
@@ -144,7 +149,7 @@ el.append(d)});$('#b'+l).style.width=pct(l)+'%'});
 const n=all('m').concat(all('a')),dn=n.filter(x=>S.done[x.id]).length;$('#pt').textContent=dn+' of '+n.length+' done';$('#pb').style.width=Math.round(dn/n.length*100)+'%'}
 $('#na').onclick=()=>{const v=$('#nt').value.trim();if(!v)return;const l=$('#nl').value;S.custom.push({id:'c'+Date.now(),t:v,l,custom:1});$('#nt').value='';sv('mgr_day',S);draw()};
 $('#rs').onclick=()=>{if(confirm("Reset today's checklist?")){S.done={};sv('mgr_day',S);draw()}};
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));['today','report','crm'].forEach(p=>$('#'+p).hidden=p!==b.dataset.p);if(b.dataset.p==='crm'){topbar();mode==='data'?table():crm()}});
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));['today','report','crm'].forEach(p=>$('#'+p).hidden=p!==b.dataset.p);if(b.dataset.p==='crm'){topbar();mode==='data'?table():crm()};if(b.dataset.p==='report')rep()});
 function csv(t){const r=[];let row=[],f='',q=false;for(let i=0;i<t.length;i++){const c=t[i];if(q){if(c==='"'&&t[i+1]==='"'){f+='"';i++}else if(c==='"')q=false;else f+=c}else if(c==='"')q=true;else if(c===','){row.push(f);f=''}else if(c==='\n'||c==='\r'){if(c==='\r'&&t[i+1]==='\n')i++;row.push(f);r.push(row);row=[];f=''}else f+=c}row.push(f);r.push(row);return r.filter(x=>x.some(y=>y.trim()))}
 const mon=new Date().toLocaleString('en-US',{month:'long',year:'numeric'});
 let W=ld('mgr_wb2',null);
@@ -152,11 +157,17 @@ if(!W){const o=ld('mgr_wb',null);W={a:0,sheets:o?o.sheets.map(s=>({n:s.n,a:0,sec
 const save=()=>sv('mgr_wb2',W),cur=()=>W.sheets[W.a],sec=()=>cur().secs[cur().a];
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function chips(el,list,a,cls,fn){el.innerHTML='';list.forEach((x,i)=>{const b=document.createElement('button');b.className='chip '+cls+(i===a?' on':'');b.textContent=x.n;b.onclick=()=>{fn(i);save();table()};el.append(b)})}
+let SF='';const SALES=['Mam Ciara','Mam Cassie','Mam Christyl','Mam Kath','Sir Reymark','Sir Ian','Sir Alexis'];
 function table(){mode='data';topbar();chips($('#tabs'),W.sheets,W.a,'',i=>W.a=i);chips($('#stabs'),cur().secs,cur().a,'s',i=>cur().a=i);const s=sec();
-$('#sn').textContent=cur().n.toUpperCase();$('#ttl').textContent=cur().n+' › '+s.n;
-const cnt=w=>s.r.filter(r=>r.some(c=>(c||'').trim().toLowerCase()===w)).length;
-$('#si').innerHTML='<span>'+s.r.length+' rows</span>'+(cnt('new')?'<span>New: '+cnt('new')+'</span>':'')+(cnt('renewal')?'<span>Renewal: '+cnt('renewal')+'</span>':'');
-$('#tb').innerHTML='<tr class="ltr"><th></th>'+s.h.map((_,i)=>`<th>${L(i)}</th>`).join('')+'</tr><tr><th>#</th>'+s.h.map((x,i)=>`<th contenteditable data-hc="${i}"${sty((s.hf||[])[i],1)}>${esc(x)}</th>`).join('')+'</tr>'+s.r.map((r,n)=>`<tr><td><button class="x" data-del="${n}">✕</button> ${n+1}</td>`+s.h.map((_,i)=>`<td contenteditable data-r="${n}" data-c="${i}"${sty(((s.f||[])[n]||[])[i])}>${esc(r[i]||'')}</td>`).join('')+'</tr>').join('')}
+$('#sn').textContent=cur().n.toUpperCase();$('#ttl').textContent=cur().n+' \u203a '+s.n;
+const si=s.h.findIndex(h=>/sales|rep/i.test(h||'')),sf=$('#sf');sf.hidden=si<0;if(si<0)SF='';
+const rv=r=>(r[si]||'').trim().toLowerCase(),extra=si<0?[]:[...new Set(s.r.map(r=>(r[si]||'').trim()).filter(x=>x&&!SALES.some(n=>n.toLowerCase()===x.toLowerCase())))].sort();
+sf.innerHTML='<option value="">All sales ('+s.r.length+')</option>'+SALES.concat(extra).map(n=>`<option value="${esc(n)}"${n===SF?' selected':''}>${esc(n)} (${s.r.filter(r=>rv(r)===n.toLowerCase()).length})</option>`).join('');
+const rows=s.r.map((r,n)=>({r,n})).filter(o=>!SF||rv(o.r)===SF.toLowerCase());
+const isN=c=>/^\s*(new|closed \(new\))\s*$/i.test(c||''),isR=c=>/^\s*renewal\s*$/i.test(c||''),nn=rows.filter(o=>o.r.some(isN)).length,rr=rows.filter(o=>o.r.some(isR)).length,t=rows.length,pc=v=>(t?Math.round(v/t*1000)/10:0)+'%';
+$('#si').innerHTML=`<span>${t} rows</span>`+(nn||rr?`<span>New: ${nn} (${pc(nn)})</span><span>Renewal: ${rr} (${pc(rr)})</span>`:'')+(SF?`<span style="background:rgba(79,70,229,.14);color:var(--ac2)">${esc(SF)}</span>`:'')+(nn||rr?`<div style="flex-basis:100%;height:10px;border-radius:6px;overflow:hidden;display:flex;background:var(--bd)"><i style="width:${nn/t*100}%;background:#00e5ff"></i><i style="width:${rr/t*100}%;background:#94a3b8"></i></div>`:'');
+$('#tb').innerHTML='<tr class="ltr"><th></th>'+s.h.map((_,i)=>`<th>${L(i)}</th>`).join('')+'</tr><tr><th>#</th>'+s.h.map((x,i)=>`<th contenteditable data-hc="${i}"${sty((s.hf||[])[i],1)}>${esc(x)}</th>`).join('')+'</tr>'+rows.map(({r,n})=>`<tr><td><button class="x" data-del="${n}">\u2715</button> ${n+1}</td>`+s.h.map((_,i)=>`<td contenteditable data-r="${n}" data-c="${i}"${sty(((s.f||[])[n]||[])[i])}>${esc(r[i]||'')}</td>`).join('')+'</tr>').join('')}
+$('#sf').onchange=()=>{SF=$('#sf').value;table()};
 $('#tb').addEventListener('focusout',e=>{const d=e.target.dataset,s=sec();if(d.hc!==undefined)s.h[+d.hc]=e.target.textContent;else if(d.r!==undefined){const r=s.r[+d.r];while(r.length<=+d.c)r.push('');r[+d.c]=e.target.textContent}else return;save()});
 $('#tb').addEventListener('click',e=>{const i=e.target.dataset.del;if(i!==undefined&&confirm('Delete this row?')){sec().r.splice(+i,1);if(sec().f)sec().f.splice(+i,1);save();table()}});
 $('#ar').onclick=()=>{const s=sec();s.r.push(s.h.map(()=>''));save();table()};
@@ -171,7 +182,7 @@ $('#dsec').onclick=()=>{if(cur().secs.length<2){alert('A sheet needs at least on
 function imp(rows){if(!rows.length)return;const s=sec();if(s.r.length&&!confirm('OK = add rows to this section. Cancel = replace this section\'s data.')){s.h=rows[0];s.r=rows.slice(1)}else{if(!s.r.length)s.h=rows[0];s.r.push(...rows.slice(1))}save();table()}
 $('#fi').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>imp(csv(String(r.result)));r.readAsText(f);e.target.value=''};
 $('#pb2').onclick=()=>{const t=$('#ps').value.trim();if(!t)return;const rows=t.split(/\r?\n/).map(l=>l.split('\t'));if(!rows.some(r=>r.length>1)){alert('Copy the cells directly from Google Sheets so the columns are kept.');return}imp(rows);$('#ps').value=''};
-$('#ex').onclick=()=>{const s=sec(),t=[s.h,...s.r].map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download=cur().n+' - '+s.n+'.csv';a.click()};
+$('#ex').onclick=()=>{const s=sec(),t=[s.h,...s.r].map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');saveFile(cur().n+' - '+s.n+'.csv',t)};
 function find(){const q=$('#q').value.trim().toLowerCase(),o=$('#sr');if(!q){o.innerHTML='';return}let n=0,h='';W.sheets.forEach((sh,si)=>sh.secs.forEach((s,ci)=>s.r.forEach(r=>{if(r.join(' ').toLowerCase().includes(q)){n++;h+=`<tr data-s="${si}" data-c="${ci}" style="cursor:pointer"><td><b>${esc(sh.n)} › ${esc(s.n)}</b></td><td>${esc(r.join(' | '))}</td></tr>`}})));o.innerHTML=`<div class="sub" style="margin:10px 0 6px">${n} result(s). Tap a row to open it.</div><div class="sc" style="max-height:260px;overflow:auto"><table>${h}</table></div>`}
 $('#sb').onclick=find;$('#q').onkeydown=e=>{if(e.key==='Enter')find()};$('#sx').onclick=()=>{$('#q').value='';$('#sr').innerHTML=''};
 $('#sr').onclick=e=>{const tr=e.target.closest('tr');if(tr&&tr.dataset.s){W.a=+tr.dataset.s;cur().a=+tr.dataset.c;save();table();window.scrollTo(0,0)}};
@@ -215,7 +226,7 @@ $('#cq').oninput=crm;$('#cr').onchange=crm;
 $('#vb').onclick=()=>{cview='board';$('#vb').classList.add('on');$('#vl').classList.remove('on');crm()};
 $('#vl').onclick=()=>{cview='list';$('#vl').classList.add('on');$('#vb').classList.remove('on');crm()};
 $('#ci').onclick=()=>{let add=0,sk=0;const ex=new Set(CRM.map(x=>(x.name+'|'+(x.biz||'')).toLowerCase()));cur().secs.forEach(s=>{const f=re=>s.h.findIndex(h=>re.test(h||'')),i={n:f(/name/i),b:f(/business|page/i),r:f(/sales|rep/i),nw:f(/^\s*new\s*$/i),rn:f(/renew/i),c:f(/concept/i),sg:f(/^\s*stage\s*$/i),p:f(/phone/i),e:f(/email/i),v:f(/value/i),u:f(/follow/i),o:f(/^\s*notes?\s*$/i)};if(i.n<0)return;s.r.forEach(r=>{const g=j=>j<0?'':(r[j]||'').trim(),nm=g(i.n);if(!nm)return;const k=(nm+'|'+g(i.b)).toLowerCase();if(ex.has(k)){sk++;return}ex.add(k);const sv_=g(i.sg),st=ST.includes(sv_)?sv_:g(i.rn)?'Renewal':g(i.nw)?'Closed (New)':'Lead',x={id:'c'+Date.now()+'_'+add,name:nm,biz:g(i.b),rep:g(i.r),concept:g(i.c),phone:g(i.p),email:g(i.e),val:g(i.v),fu:g(i.u),notes:g(i.o),st,log:[]};lg(x,'Imported from '+cur().n+' › '+s.n+' ('+st+')');CRM.push(x);add++})});cs();crm();alert(add+' client(s) imported'+(sk?', '+sk+' duplicate(s) skipped':'')+'. It reads the columns Name, Business/Page, Sales Representative, New, Renewal and Concept Ad from every section of the current sheet.')};
-$('#ce').onclick=()=>{const h=['Name','Business','Sales Rep','Stage','Phone','Email','Concept Ad','Value','Follow-up','Notes'],t=[h,...CRM.map(x=>[x.name,x.biz,x.rep,x.st,x.phone,x.email,x.concept,x.val,x.fu,x.notes])].map(r=>r.map(c=>'"'+String(c||'').replace(/"/g,'""')+'"').join(',')).join('\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download='crm-clients.csv';a.click()};
+$('#ce').onclick=()=>{const h=['Name','Business','Sales Rep','Stage','Phone','Email','Concept Ad','Value','Follow-up','Notes'],t=[h,...CRM.map(x=>[x.name,x.biz,x.rep,x.st,x.phone,x.email,x.concept,x.val,x.fu,x.notes])].map(r=>r.map(c=>'"'+String(c||'').replace(/"/g,'""')+'"').join(',')).join('\n');saveFile('crm-clients.csv',t)};
 let mode='pipe';
 function topbar(){const t=$('#top');t.innerHTML='';const add=(n,on,fn)=>{const b=document.createElement('button');b.className='chip'+(on?' on':'');b.textContent=n;b.onclick=fn;t.append(b)};add('\ud83d\udcca Pipeline',mode==='pipe',()=>{mode='pipe';crm()});W.sheets.forEach((s,i)=>add(s.n,mode==='data'&&i===W.a,()=>{W.a=i;save();table()}));add('+ New sub section',false,()=>$('#ns').click());$('#pipe').hidden=mode!=='pipe';$('#clients').hidden=mode!=='data'}
 $('#crm').insertBefore($('#clients'),$('#dl'));$('#clients').hidden=true;$('#tabs').hidden=true;$('#clients .lbl').hidden=true;$('#ns').textContent='+ New sub section';$('#rn').textContent='Rename sub section';$('#ds2').textContent='Delete sub section';
@@ -243,10 +254,29 @@ $('#pb3').onclick=()=>{const t=$('#pst').value;if(t.trim())doPaste(t);$('#pst').
 $('#pst').addEventListener('paste',()=>setTimeout(()=>$('#pb3').click(),50));
 $('#pst').addEventListener('input',e=>{if(e.inputType==='insertFromPaste'||(e.target.value.length>20&&/\n/.test(e.target.value)))setTimeout(()=>$('#pb3').click(),60)});
 document.addEventListener('paste',e=>{if(mode!=='pipe'||$('#crm').hidden||!$('#md').hidden)return;if(e.target.closest&&e.target.closest('input,textarea,[contenteditable]'))return;const t=e.clipboardData.getData('text');if(!/\t/.test(t))return;e.preventDefault();doPaste(t)});
+async function saveFile(name,data){try{const d=window.claude&&claude.use?await claude.use('downloads'):null;if(d){await d.save({filename:name,data});return}}catch(e){if(e&&e.code==='declined')return}const a=document.createElement('a');a.href=URL.createObjectURL(data instanceof Blob?data:new Blob([data]));a.download=name;document.body.append(a);a.click();a.remove()}
+function mkPdf(pgs){const enc=new TextEncoder(),parts=[],xr=[];let off=0;const push=b=>{const u=typeof b==='string'?enc.encode(b):b;parts.push(u);off+=u.length};push('%PDF-1.4\n');const n=pgs.length,kids=pgs.map((_,i)=>(3+i*3)+' 0 R').join(' ');
+xr[1]=off;push('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');xr[2]=off;push(`2 0 obj\n<< /Type /Pages /Kids [${kids}] /Count ${n} >>\nendobj\n`);
+pgs.forEach((p,i)=>{const a=3+i*3,c=a+1,m=a+2,st='q 595 0 0 842 0 0 cm /Im0 Do Q';xr[a]=off;push(`${a} 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /XObject << /Im0 ${m} 0 R >> >> /Contents ${c} 0 R >>\nendobj\n`);xr[c]=off;push(`${c} 0 obj\n<< /Length ${st.length} >>\nstream\n${st}\nendstream\nendobj\n`);xr[m]=off;push(`${m} 0 obj\n<< /Type /XObject /Subtype /Image /Width ${p.w} /Height ${p.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${p.d.length} >>\nstream\n`);push(p.d);push('\nendstream\nendobj\n')});
+const xo=off,tot=3+n*3;let x=`xref\n0 ${tot}\n0000000000 65535 f \n`;for(let k=1;k<tot;k++)x+=String(xr[k]).padStart(10,'0')+' 00000 n \n';push(x+`trailer\n<< /Size ${tot} /Root 1 0 R >>\nstartxref\n${xo}\n%%EOF`);return new Blob(parts,{type:'application/pdf'})}
+const dstr=()=>new Date(($('#rd').value||today)+'T00:00:00').toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+let rdCur='';
+function repLoad(){rdCur=$('#rd').value;$('#ro').value=(ld('mgr_rep_'+rdCur,{t:''})||{}).t||'';$('#rp').value=ld('mgr_by','')||''}
+function repSave(){if(rdCur)sv('mgr_rep_'+rdCur,{t:$('#ro').value});sv('mgr_by',$('#rp').value)}
+function repLines(x,text,max){const out=[];text.split(/\r?\n/).forEach(p=>{if(!p.trim()){out.push('');return}let l='';p.split(' ').forEach(w=>{const t=l?l+' '+w:w;if(l&&x.measureText(t).width>max){out.push(l);l=w}else l=t});out.push(l)});return out}
+function repCanvas(){const W=1588,ph=Math.round(W*842/595),pad=100,fs=30,lh=46,hh=300,F='"Segoe UI",Arial,sans-serif',c=document.createElement('canvas'),x=c.getContext('2d');x.font=fs+'px '+F;const ls=repLines(x,$('#ro').value,W-2*pad),H=Math.ceil((hh+70+ls.length*lh+90)/ph)*ph;c.width=W;c.height=H;x.fillStyle='#fff';x.fillRect(0,0,W,H);
+const g=x.createLinearGradient(0,0,W,hh);g.addColorStop(0,'#0f766e');g.addColorStop(1,'#4f46e5');x.fillStyle=g;x.fillRect(0,0,W,hh);x.fillStyle='#fff';x.textBaseline='alphabetic';x.font='700 56px '+F;x.fillText('DAILY REPORT',pad,125);x.font='600 42px '+F;x.fillText(dstr(),pad,192);const by=$('#rp').value.trim();if(by){x.font='28px '+F;x.fillText('Prepared by: '+by,pad,246)}
+x.fillStyle='#0f172a';let y=hh+80;ls.forEach(l=>{const h=/:\s*$/.test(l.trim())&&l.length<50||/^[A-Z0-9 \/&()#-]{4,}$/.test(l.trim());x.font=(h?'700 ':'')+fs+'px '+F;x.fillText(l,pad,y);y+=lh});return c}
+function rep(){if(!$('#rd').value){$('#rd').value=today;repLoad()}const c=repCanvas(),v=$('#rc');v.width=c.width/2;v.height=c.height/2;v.getContext('2d').drawImage(c,0,0,v.width,v.height)}
+let rtm;const rdeb=()=>{clearTimeout(rtm);rtm=setTimeout(()=>{repSave();rep()},250)};
+$('#ro').addEventListener('input',rdeb);$('#rp').addEventListener('input',rdeb);$('#gr').addEventListener('click',()=>setTimeout(rdeb,0));$('#rd').onchange=()=>{repSave();repLoad();rep()};
+$('#rd').value=today;repLoad();
+$('#dp').onclick=async()=>{const c=repCanvas(),W=c.width,ph=Math.round(W*842/595),n=Math.round(c.height/ph),pgs=[];for(let i=0;i<n;i++){const pc=document.createElement('canvas');pc.width=W;pc.height=ph;pc.getContext('2d').drawImage(c,0,i*ph,W,ph,0,0,W,ph);const bin=atob(pc.toDataURL('image/jpeg',.92).split(',')[1]),u=new Uint8Array(bin.length);for(let k=0;k<bin.length;k++)u[k]=bin.charCodeAt(k);pgs.push({d:u,w:W,h:ph})}await saveFile('Daily Report '+$('#rd').value+'.pdf',mkPdf(pgs))};
+$('#di').onclick=()=>{repCanvas().toBlob(b=>saveFile('Daily Report '+$('#rd').value+'.png',b),'image/png')};
 function tick(){$('#clk').textContent=new Date().toLocaleTimeString('en-PH',{hour:'numeric',minute:'2-digit',second:'2-digit'})}
 tick();setInterval(tick,1000);
 $('#gr').onclick=()=>{const u=all('m').concat(all('a')).filter(x=>!S.done[x.id]).map(x=>'- '+x.t);
-$('#ro').value=`DAILY TEAM REPORT - ${$('#dt').textContent}\n\nAttendance: ${$('#at').value||0} present, ${$('#ab').value||0} absent\nNew clients today: ${$('#nc').value||0}\nMorning tasks: ${pct('m')}% | Afternoon tasks: ${pct('a')}%\n\nNOTES / CONCERNS / IMPROVEMENTS:\n${$('#rt').value||'-'}\n\nPENDING TASKS:\n${u.length?u.join('\n'):'None, all done'}`};
+$('#ro').value=`Attendance: ${$('#at').value||0} present, ${$('#ab').value||0} absent\nNew clients today: ${$('#nc').value||0}\nMorning tasks: ${pct('m')}% | Afternoon tasks: ${pct('a')}%\n\nNOTES / CONCERNS / IMPROVEMENTS:\n${$('#rt').value||'-'}\n\nPENDING TASKS:\n${u.length?u.join('\n'):'None, all done'}`};
 $('#cp').onclick=()=>{$('#ro').select();try{document.execCommand('copy')}catch(e){}};
 draw();
 </script></body></html>
