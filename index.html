@@ -71,6 +71,7 @@ textarea{width:100%;min-height:220px;padding:10px;border:1px solid var(--bd);bor
 <div class="card"><div class="k" id="ck" style="margin:0"></div><div id="cf"></div></div>
 <div class="card"><div class="row" style="margin:0"><input id="cq" placeholder="Search clients, business, rep, phone..."><select id="cr"></select><button class="b" id="cn">+ New client</button></div>
 <div class="row" style="margin-bottom:0"><button class="chip on" id="vb">Board</button><button class="chip" id="vl">List</button><button class="b g" id="ci">Import from current sheet</button><button class="b g" id="ce">Download CSV</button><button class="b" id="ca" style="background:var(--ac2)">Move all to a new sub section…</button><button class="b g" id="cc" style="color:#dc2626">Empty pipeline</button></div></div>
+<div class="card"><div class="lbl">ADD CLIENTS FROM GOOGLE SHEETS</div><div class="sub" style="margin-bottom:8px">In Google Sheets, select your rows (include the header row if you have one), press Ctrl+C, then paste in the box below. It imports right away. You can also just press Ctrl+V anywhere on this Pipeline page.</div><textarea id="pt" style="min-height:70px" placeholder="Paste your Google Sheets rows here"></textarea><div class="row" style="align-items:center;margin-bottom:0"><button class="b" id="pb3">Import pasted rows</button><span class="sub" id="pm"></span></div><div class="sub" style="margin-top:6px">Columns are matched by their titles: Name, Business/Page, Sales Representative, New, Renewal, Concept Ad, Stage, Phone, Email, Value, Follow-up, Notes. With no header row, the order Name, Business, Sales Rep, New, Renewal, Concept Ad is assumed. Duplicates are skipped.</div></div>
 <div id="cv"></div></div>
 <datalist id="dl"></datalist>
 <div id="md" hidden style="position:fixed;inset:0;background:rgba(15,23,42,.6);z-index:50;overflow:auto;padding:16px"><div class="card" style="max-width:660px;margin:16px auto"><div class="ttl" style="margin-bottom:10px">Client</div>
@@ -232,6 +233,15 @@ $('#thc').innerHTML='';BG[e].forEach(([n,c])=>{const b=document.createElement('b
 $('#thb').onclick=()=>{$('#thp').hidden=!$('#thp').hidden};
 if(matchMedia('(prefers-color-scheme: dark)').addEventListener)matchMedia('(prefers-color-scheme: dark)').addEventListener('change',theme);
 theme();
+function pimp(rows){if(!rows.length)return{add:0,sk:0};const f=re=>h.findIndex(x=>re.test(x));let h=rows[0].map(x=>(x||'').trim()),body=rows.slice(1),i={n:f(/name/i),b:f(/business|page/i),r:f(/sales|rep/i),nw:f(/^new$/i),rn:f(/renew/i),c:f(/concept/i),sg:f(/^stage$/i),p:f(/phone|contact/i),e:f(/email/i),v:f(/value|amount|price/i),u:f(/follow/i),o:f(/^notes?$/i)};
+if(i.n<0){i={n:0,b:1,r:2,nw:3,rn:4,c:5,sg:-1,p:-1,e:-1,v:-1,u:-1,o:-1};body=rows}
+let add=0,sk=0;const ex=new Set(CRM.map(x=>(x.name+'|'+(x.biz||'')).toLowerCase()));
+body.forEach(r=>{const g=j=>j<0?'':(r[j]||'').trim(),nm=g(i.n);if(!nm||nm.toLowerCase()==='name')return;const k=(nm+'|'+g(i.b)).toLowerCase();if(ex.has(k)){sk++;return}ex.add(k);const sv_=g(i.sg),st=ST.includes(sv_)?sv_:g(i.rn)?'Renewal':g(i.nw)?'Closed (New)':'Lead',x={id:'c'+Date.now()+'_'+add,name:nm,biz:g(i.b),rep:g(i.r),concept:g(i.c),phone:g(i.p),email:g(i.e),val:g(i.v).replace(/[^\d.]/g,''),fu:g(i.u),notes:g(i.o),st,log:[]};lg(x,'Pasted from Google Sheets ('+st+')');CRM.push(x);add++});
+cs();crm();return{add,sk}}
+function doPaste(txt){const r=pimp(parse(txt,'\t'));$('#pm').textContent=r.add?r.add+' client(s) added'+(r.sk?', '+r.sk+' duplicate(s) skipped':'')+'.':(r.sk?'No new clients: '+r.sk+' duplicate(s) skipped.':'Nothing imported. Copy the cells directly from Google Sheets.')}
+$('#pb3').onclick=()=>{const t=$('#pt').value;if(t.trim())doPaste(t);$('#pt').value=''};
+$('#pt').addEventListener('paste',()=>setTimeout(()=>$('#pb3').click(),50));
+document.addEventListener('paste',e=>{if(mode!=='pipe'||$('#crm').hidden||!$('#md').hidden)return;if(e.target.closest&&e.target.closest('input,textarea,[contenteditable]'))return;const t=e.clipboardData.getData('text');if(!/\t/.test(t))return;e.preventDefault();doPaste(t)});
 function tick(){$('#clk').textContent=new Date().toLocaleTimeString('en-PH',{hour:'numeric',minute:'2-digit',second:'2-digit'})}
 tick();setInterval(tick,1000);
 $('#gr').onclick=()=>{const u=all('m').concat(all('a')).filter(x=>!S.done[x.id]).map(x=>'- '+x.t);
