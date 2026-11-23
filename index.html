@@ -595,7 +595,7 @@ function parseReport(text){
 
   function clean(s){
     s=String(s).replace(/[​﻿]/g,'').replace(/ /g,' ').replace(/[‘’]/g,"'").replace(/[“”]/g,'"').replace(/\t/g,' ');
-    s=s.replace(LEAD,'');
+    s=s.replace(/[*`]/g,'');s=s.replace(LEAD,'');
     return s.replace(/\s+/g,' ').trim();
   }
   function fmtDate(mon,d,y){
@@ -628,7 +628,7 @@ function parseReport(text){
     if(l==='fb'||l==='facebook')return 'fb';
     if(l==='ig'||l==='instagram')return 'ig';
     if(l.indexOf('plant')>=0)return 'plant';
-    if(l.indexOf('called')>=0)return 'called';
+    if((l.indexOf('call')>=0&&l.indexOf('time')<0)||l.indexOf('dial')>=0)return 'called';
     if(l.indexOf('sent')>=0)return 'sent';
     return null;
   }
@@ -638,12 +638,14 @@ function parseReport(text){
   var lines=[];
   raw.split(/\r\n|\r|\n/).forEach(function(l){var c=clean(l);if(c)lines.push(c);});
 
+  result.extra=[];result.date=result.date||'';
+  function addExtra(l){if(/^(daily\s+)?(sales\s+)?report\b[^:]*$/i.test(l))return;result.extra.push(l);}
   var rep=null,sec=null,group=null,item=null,skipSec=false;
   var i,line;
 
   function closeGroup(){
     if(sec&&group&&!group.items.length&&group.rep){
-      result.warnings.push('Rep "'+group.rep+'" in section "'+sec.title+'" ('+sec.date+') has no items');
+      addExtra(group.rep);
     }
     if(sec&&group&&!group.items.length){
       var ix=sec.groups.indexOf(group);
@@ -682,31 +684,27 @@ function parseReport(text){
     line=lines[i];
     var dt=parseDate(line);
     if(dt){
-      closeSection();
-      var title=(i+1<lines.length&&!parseDate(lines[i+1]))?lines[++i]:'';
-      var lt=title.toLowerCase(),type=null;
-      if(lt.indexOf('plant')>=0)type='plants';
-      else if(/closed|renewal|referral/.test(lt))type='closed';
-      if(!type){
-        result.warnings.push('Section "'+title+'" ('+dt+') has unrecognized type; skipped');
-        skipSec=true;sec=null;rep=null;
-        continue;
-      }
+      var peek=(i+1<lines.length&&!parseDate(lines[i+1]))?lines[i+1]:'',lt0=peek.toLowerCase(),ty0=null;
+      if(lt0.indexOf('plant')>=0)ty0='plants';
+      else if(/closed|renewal|referral/.test(lt0))ty0='closed';
+      if(!ty0){if(!result.date)result.date=dt;continue;}
+      i++;closeSection();
       skipSec=false;
-      sec={type:type,date:dt,title:title.toUpperCase(),total:null,groups:[]};
+      sec={type:ty0,date:dt,title:peek.toUpperCase(),total:null,groups:[]};
       result.sections.push(sec);
       group=null;item=null;
       continue;
     }
 
-    if(!sec&&!skipSec&&result.sections.length===0){
+    function looksName(k){var sf=kv(lines[k]);if(/[:]/.test(lines[k])||(sf&&sumKey(sf.k))||lines[k].length>40||/^\d/.test(lines[k])||k+1>=lines.length)return false;var nk=kv(lines[k+1]);return !!(nk&&sumKey(nk.k));}
+    if(sec&&looksName(i)){closeGroup();closeSection();sec=null;skipSec=false;}
+
+    if(!sec){
       // ---- summary mode ----
       var isName=false;
-      if(!/[:]/.test(line)&&line.length<=40){
-        var seen=0;
-        for(var j=i+1;j<lines.length&&seen<1;j++,seen++){
-          if(/^assigned\s*business/i.test(lines[j])){isName=true;break;}
-        }
+      var self_=kv(line);if(!/[:]/.test(line)&&!(self_&&sumKey(self_.k))&&line.length<=40&&!/^\d/.test(line)&&i+1<lines.length){
+        var nk=kv(lines[i+1]);
+        if(nk&&sumKey(nk.k))isName=true;
       }
       if(isName){
         rep={name:line,biz:'',fb:'',ig:'',sent:'',plant:'',called:'',notes:[]};
@@ -714,13 +712,13 @@ function parseReport(text){
         continue;
       }
       var p=kv(line),key=p?sumKey(p.k):null;
-      if(!rep){result.warnings.push('Skipped unrecognized line: "'+line+'"');continue;}
-      if(key)rep[key]=p.v;
+      if(!rep){if(key){rep={name:'Team',biz:'',fb:'',ig:'',sent:'',plant:'',called:'',notes:[]};result.reps.push(rep);result.warnings.push('Numbers had no rep name above them, so they are listed under "Team".')}else{addExtra(line);continue;}}
+      if(key){if(rep[key]&&p.v)rep.notes.push(line);else rep[key]=p.v}
       else rep.notes.push(line);
       continue;
     }
     if(skipSec||!sec){
-      if(!skipSec)result.warnings.push('Skipped unrecognized line: "'+line+'"');
+      if(!skipSec)addExtra(line);
       continue;
     }
 
@@ -729,7 +727,7 @@ function parseReport(text){
     if(tm){
       var num=/^(\d+)\b/.exec(tm[1]);
       if(num){sec.total=parseInt(num[1],10);}
-      else result.warnings.push('Skipped unrecognized line: "'+line+'"');
+      else addExtra(line);
       continue;
     }
     var body=line,numbered=false,nm=/^(\d+)\s*[.)]\s*(.*)$/.exec(line);
@@ -744,7 +742,7 @@ function parseReport(text){
       item.biz=q.v;continue;
     }
     if(lab==='datetocallandtime'||lab==='datetocall'||lab==='datetime'||lab==='when'){
-      if(!item){result.warnings.push('Skipped unrecognized line: "'+line+'"');continue;}
+      if(!item){addExtra(line);continue;}
       item.when=q.v;continue;
     }
     if(numbered&&body&&!/:/.test(body)){newItem(body);continue;}
@@ -753,13 +751,13 @@ function parseReport(text){
       group={rep:line,items:[]};sec.groups.push(group);
       continue;
     }
-    result.warnings.push('Skipped unrecognized line: "'+line+'"');
+    addExtra(line);
   }
   closeSection();
   return result;
 }
 
-const pasteModel=()=>{const t=($('#rpt')||{}).value||'';if(!t.trim())return null;try{const M=parseReport(t);return(M.reps.length||M.sections.length)?M:null}catch(e){return null}};
+const pasteModel=()=>{const t=($('#rpt')||{}).value||'';if(!t.trim())return null;try{const M=parseReport(t);return(M.reps.length||M.sections.length||M.extra.length)?M:null}catch(e){return null}};
 const curRep=()=>{const M=pasteModel();return M?pasteCanvas(M):repCanvas()};
 function pasteCanvas(M){
  const cs_=getComputedStyle(document.documentElement),AC=cs_.getPropertyValue('--ac').trim()||'#0d9488',AC2=cs_.getPropertyValue('--ac2').trim()||'#4f46e5',by=$('#rp').value.trim(),pad=90,W0=PW-2*pad,m=document.createElement('canvas').getContext('2d'),ops=[];let x=null,y=290;
@@ -798,13 +796,14 @@ function pasteCanvas(M){
    table([['SALES REP',.17,'l'],['#',.05,'c'],['CLIENT NAME',.28,'l'],['BUSINESS NAME',.28,'l'],['DATE TO CALL / STATUS',.22,'c']],rows,{cells:['TOTAL','',tl+' plant'+(items===1?'':'s'),'','']})}
   else{heading('CLOSED / RENEWAL / REFERRAL',sec.date);const rows=[],tc={CLOSED:GREEN,RENEWAL:AC2,REFERRAL:AMB,NEW:AC};sec.groups.forEach(g=>g.items.forEach((it,i)=>{const tg=it.tag||'CLOSED';rows.push({cells:[i===0?g.rep:'',String(i+1),it.client,it.biz,tg],pill:{4:tc[tg]||'#64748b'}})}));
    table([['SALES REP',.17,'l'],['#',.05,'c'],['CLIENT NAME',.31,'l'],['BUSINESS NAME',.31,'l'],['TYPE',.16,'c']],rows,{cells:['TOTAL','',tl+' client'+(items===1?'':'s'),'','']})}});
+ if(M.extra.length){heading('OTHER NOTES','');table([['NOTE',1,'l']],M.extra.map(t=>({cells:[t]})),null)}
  /* paint */
  const H=Math.max(Math.round(PH*.8),Math.ceil(y+90)),c=document.createElement('canvas');c.single=true;c.width=PW;c.height=H;x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,PW,c.height);
  const g=x.createLinearGradient(0,0,PW,230);g.addColorStop(0,'#0f172a');g.addColorStop(.55,AC2);g.addColorStop(1,AC);x.fillStyle=g;x.fillRect(0,0,PW,230);x.fillStyle='#fff';x.textBaseline='alphabetic';x.textAlign='left';x.font='800 76px '+FF;x.fillText('DAILY REPORT',pad,102);x.font='700 44px '+FF;x.fillText(dstr(),pad,168);if(by){x.font='500 32px '+FF;x.fillText('Prepared by: '+by,pad,212)}
  ops.forEach(f=>f());x.textAlign='right';x.fillStyle='#94a3b8';x.font='500 24px '+FF;x.fillText('Providetech Manager',PW-pad,H-34);x.textAlign='left';return c}
 function pasteUI(){const M=pasteModel(),t=$('#rpt').value.trim();$('#tcard').hidden=!!M;const st=$('#pts');if(!t){st.textContent='';return}if(!M){st.textContent='Nothing recognized yet. Check that it has rep names, a date line and a Client Plants or Closed section.';return}
  const pl=M.sections.filter(s=>s.type==='plants').reduce((a,s)=>a+s.groups.reduce((b,g)=>b+g.items.length,0),0),cl=M.sections.filter(s=>s.type==='closed').reduce((a,s)=>a+s.groups.reduce((b,g)=>b+g.items.length,0),0);
- st.textContent='Recognized: '+M.reps.length+' rep summar'+(M.reps.length===1?'y':'ies')+', '+pl+' client plant'+(pl===1?'':'s')+', '+cl+' closed/renewal/referral.'+(M.warnings.length?' Check: '+M.warnings.slice(0,3).join(' | '):'');try{const d0=M.sections[0]&&M.sections[0].date,dt=d0&&new Date(d0);if(dt&&!isNaN(dt)){const iso=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');if(iso!==$('#rd').value)st.textContent+=' Your text is dated '+d0+'. Change the Report date above if the header should match.'}}catch(e){}}
+ st.textContent='Recognized: '+M.reps.length+' rep summar'+(M.reps.length===1?'y':'ies')+', '+pl+' client plant'+(pl===1?'':'s')+', '+cl+' closed/renewal/referral.'+(M.extra.length?' '+M.extra.length+' other line'+(M.extra.length===1?'':'s')+' added under Other notes.':'')+(M.warnings.length?' Check: '+M.warnings.slice(0,3).join(' | '):'');try{const d0=M.sections[0]&&M.sections[0].date,dt=d0&&new Date(d0);if(dt&&!isNaN(dt)){const iso=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');if(iso!==$('#rd').value)st.textContent+=' Your text is dated '+d0+'. Change the Report date above if the header should match.'}}catch(e){}}
 $('#rpt').addEventListener('input',()=>{if(rdCur)sv('mgr_paste_'+rdCur,{t:$('#rpt').value});rdeb()});
 $('#ptc').onclick=async()=>{if(!$('#rpt').value.trim())return;if(await ask('Clear the pasted text for this date?',{yes:'Clear'})){$('#rpt').value='';if(rdCur)sv('mgr_paste_'+rdCur,{t:''});rep()}};
 {const _r4=rep;rep=function(){try{pasteUI()}catch(e){}return _r4()}}
