@@ -134,8 +134,8 @@ nav button.on,.chip.on{background:linear-gradient(135deg,var(--ac),var(--ac2));b
 </section>
 
 <section id="clients" hidden>
-<div class="card"><div class="lbl">SHEETS</div><div class="chips" id="tabs"></div>
-<div class="row"><button class="b" id="ns">+ New sheet</button><button class="b g" id="rn">Rename sheet</button><button class="b g" id="ds2">Delete sheet</button></div></div>
+<div class="card"><div class="lbl">SUB SECTIONS</div><div class="chips" id="tabs"></div>
+<div class="row"><button class="b" id="ns">+ New sub section</button><button class="b g" id="rn">Rename sub section</button><button class="b g" id="ds2" style="color:#dc2626">Delete this sub section</button></div></div>
 <div class="card"><div class="lbl">GROUPS (e.g. months) IN <span id="sn"></span></div><div class="chips" id="stabs"></div>
 <div class="row"><button class="b" id="nsec">+ New group</button><button class="b g" id="rsec">Rename group</button><button class="b g" id="dsec">Delete group</button></div></div>
 <div class="card"><div class="row" style="margin:0"><input id="q" placeholder="Search names, pages, IDs across ALL sheets and sections..."><button class="b" id="sb">Search</button><button class="b g" id="sx">Clear</button></div><div id="sr"></div></div>
@@ -272,9 +272,9 @@ $('#ac').onclick=async()=>{const n=await inp('New column name');if(!n)return;con
 const COLS='Name,Business/FB Page,Sales Representative,Status,Notes';
 $('#ns').onclick=async()=>{const n=await inp('Sub section name (example: Closed Deal Report, Leads, Ad Accounts)');if(!n)return;const m=await inp('First group name, such as the month (example: '+mon+')',mon);if(!m)return;const h=await inp('Column names, separated by commas',COLS);if(!h)return;W.sheets.push({n,a:0,secs:[{n:m,h:h.split(',').map(x=>x.trim()),r:[]}]});W.a=W.sheets.length-1;save();table()};
 $('#nsec').onclick=async()=>{const n=await inp('Group name (example: December 2026)');if(!n)return;let h=[...sec().h];if(!(await ask('Use the same columns as the current section?',{yes:'Same columns',no:'Type new columns'}))){const t=await inp('Column names, separated by commas',COLS);if(!t)return;h=t.split(',').map(x=>x.trim())}cur().secs.push({n,h,r:[]});cur().a=cur().secs.length-1;save();table()};
-$('#rn').onclick=async()=>{const n=await inp('Rename sheet',cur().n);if(n){cur().n=n;save();table()}};
+$('#rn').onclick=async()=>{const n=await inp('Rename sub section',cur().n);if(n){cur().n=n;save();table()}};
 $('#rsec').onclick=async()=>{const n=await inp('Rename section',sec().n);if(n){sec().n=n;save();table()}};
-$('#ds2').onclick=async()=>{if(W.sheets.length<2){alert('Keep at least one sheet.');return}if(await ask('Delete sheet "'+cur().n+'" with ALL its sections and rows?')){W.sheets.splice(W.a,1);W.a=0;save();table()}};
+$('#ds2').onclick=async()=>{const last=W.sheets.length<2;if(await ask('Delete sub section "'+cur().n+'" with ALL its groups and rows? This cannot be undone and removes it for everyone.'+(last?'\n\nThis is the last sub section, so an empty one will be created in its place.':''),{yes:'Delete'})){W.sheets.splice(W.a,1);if(!W.sheets.length)W.sheets.push({n:'Sub section 1',a:0,secs:[{n:mon,h:COLS.split(',').map(x=>x.trim()),r:[]}]});W.a=0;save();table()}};
 $('#dsec').onclick=async()=>{if(cur().secs.length<2){alert('A sheet needs at least one section.');return}if(await ask('Delete section "'+sec().n+'" and all its rows?')){cur().secs.splice(cur().a,1);cur().a=0;save();table()}};
 function imp(rows){if(!rows.length)return;const s=sec();if(s.r.length&&!confirm('OK = add rows to this section. Cancel = replace this section\'s data.')){s.h=rows[0];s.r=rows.slice(1)}else{if(!s.r.length)s.h=rows[0];s.r.push(...rows.slice(1))}save();table()}
 $('#fi').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>imp(csv(String(r.result)));r.readAsText(f);e.target.value=''};
