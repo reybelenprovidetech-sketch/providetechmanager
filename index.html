@@ -117,6 +117,42 @@ nav button.on,.chip.on{background:linear-gradient(135deg,var(--ac),var(--ac2));b
 [hidden]{display:none!important}.gate{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;background:var(--bg);overflow:auto}#dlg{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,.6)}
 .gwrap{display:flex;gap:24px;flex-wrap:wrap;align-items:center;margin-top:10px}.gleg{display:flex;flex-direction:column;gap:6px;font-size:14px}.gleg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:8px;vertical-align:-1px}.greps{flex:1;min-width:min(100%,260px)}.gr{margin-bottom:10px}.grh{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px}.grh span{color:var(--mu);font-variant-numeric:tabular-nums}.gb{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--bd);margin-top:4px}
 .te_{cursor:text;border-radius:6px;padding:2px 4px;margin:-2px -4px;min-width:0;overflow-wrap:anywhere}.te_:hover{background:rgba(127,127,127,.12)}.te_:focus{outline:2px solid var(--ac);background:var(--cd,transparent)}
+
+/* ===== PHONE LAYOUT ===== */
+button,.chip,nav button,select{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+@media(max-width:640px){
+html,body{overflow-x:hidden}
+.w{padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px));padding-top:max(10px,env(safe-area-inset-top,0px));padding-bottom:calc(28px + env(safe-area-inset-bottom,0px))}
+.hero{flex-direction:column;align-items:stretch!important;gap:10px;padding:14px;border-radius:16px;margin-bottom:0}
+.hero>div:first-child{min-width:0}
+h1{font-size:19px}
+.cube{width:34px;height:34px;margin:4px 12px 4px 4px}.cube i:nth-child(1){transform:translateZ(17px)}.cube i:nth-child(2){transform:rotateY(180deg) translateZ(17px)}.cube i:nth-child(3){transform:rotateY(90deg) translateZ(17px)}.cube i:nth-child(4){transform:rotateY(-90deg) translateZ(17px)}.cube i:nth-child(5){transform:rotateX(90deg) translateZ(17px)}.cube i:nth-child(6){transform:rotateX(-90deg) translateZ(17px)}
+.hero>div:last-child{flex-wrap:wrap!important;gap:8px!important;width:100%;justify-content:space-between}
+#clk{flex:1 1 100%;gap:12px}
+#clk svg{width:76px;height:76px}
+#clkd{padding:6px 12px;flex:1;justify-content:center}
+#clkd .ct{font-size:30px}#clkd .cs{font-size:17px}#clkd .cap{font-size:13px}
+.hero #thb,.hero #lgo{padding:9px 14px!important;min-height:40px}
+#whoami{flex:1;text-align:right;font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+nav{position:sticky;top:6px;z-index:30;width:100%;flex-wrap:nowrap;overflow-x:auto;border-radius:16px;gap:4px;padding:5px;margin:10px 0;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:none;padding:10px 16px;white-space:nowrap;min-height:42px}
+.card{padding:12px;border-radius:14px;margin-bottom:10px}
+.b,.chip{min-height:42px}
+.row{gap:8px;align-items:center}.row>.b{flex:1 1 140px}.row>.chip{flex:none}#nm,#ne{flex:1 1 0!important;width:auto!important;min-width:0!important}
+.row input,.row select,.in,textarea,select{font-size:16px;min-height:42px}
+textarea{min-height:140px}
+.chips{gap:6px}
+th,td{padding:7px 8px}
+.sc{-webkit-overflow-scrolling:touch}
+.kb{scroll-snap-type:x mandatory;gap:8px}.kc{min-width:84%;scroll-snap-align:start}
+#md .card,.gate .card{max-width:100%}
+.gate{padding:12px;align-items:flex-start;padding-top:max(40px,env(safe-area-inset-top,0px))}
+.mon{font-size:14px}
+.ttl{font-size:16px}
+.gwrap{gap:14px}
+}
+@media(max-width:380px){h1{font-size:17px}#clk svg{width:64px;height:64px}#clkd .ct{font-size:26px}nav button{padding:10px 12px}}
 </style>
 <div class="gate" id="gate"><form class="card" id="gf" style="max-width:380px;width:100%;margin:0"><div class="ttl">Providetech Manager</div><div class="sub" style="margin-bottom:12px">Sign in to continue.</div><label class="sub" for="gu">Username<input class="in" id="gu" name="username" autocomplete="username" autocapitalize="off" spellcheck="false"></label><label class="sub" for="gn" style="display:block;margin-top:10px">Your name (shown in the activity log)<input class="in" id="gn" name="displayname" autocomplete="name" maxlength="40"></label><label class="sub" for="gp" style="display:block;margin-top:10px">Password<input class="in" id="gp" name="password" type="password" autocomplete="current-password"></label><label class="sub" for="gk" style="display:flex;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" id="gk" checked style="width:auto;margin:0"> Keep me signed in on this device</label><div id="ge" class="sub" style="color:#dc2626;min-height:18px;margin:8px 0" role="alert"></div><button class="b" type="submit" style="width:100%">Sign in</button></form></div><div class="w" id="app" hidden>
 <div class="hero"><div style="display:flex;align-items:center;gap:6px"><div class="cube"><i></i><i></i><i></i><i></i><i></i><i></i></div><div><h1>Providetech Manager</h1><div class="sub" id="dt"></div><div class="synb" id="syn">Local only</div></div></div><div style="display:flex;gap:10px;align-items:center"><div id="clk"></div><button id="thb" title="Theme and background" style="border:0;border-radius:12px;padding:10px 12px;font-size:20px;cursor:pointer;background:rgba(255,255,255,.2)">🎨</button><button id="lgo" title="Sign out" style="border:0;border-radius:12px;padding:10px 12px;font-size:14px;font-weight:600;cursor:pointer;background:rgba(255,255,255,.2);color:#fff">Sign out</button><span id="whoami" class="sub" style="color:#fff;opacity:.9"></span></div></div>
@@ -177,7 +213,7 @@ nav button.on,.chip.on{background:linear-gradient(135deg,var(--ac),var(--ac2));b
 <div class="row"><button class="b" id="dp">Download PDF</button><button class="b" id="di" style="background:var(--ac2)">Download image (PNG)</button><button class="b g" id="cp" hidden>Copy text</button></div><div class="sub" id="rm"></div></div>
 <div class="card"><div class="lbl">PREVIEW (landscape report, date printed at the top)</div><canvas id="rc" style="width:100%;border:1px solid var(--bd);border-radius:10px;background:#fff"></canvas></div>
 </div>
-<div id="rv_a" hidden><div class="chips" id="sestabs" style="margin-bottom:14px"><button class="chip on" data-s="am">Morning report</button><button class="chip" data-s="pm">Afternoon report</button></div><div class="card"><div class="lbl" id="alb">EMPLOYEE ATTENDANCE</div><div class="row" style="margin-top:0"><input id="at" type="number" min="0" placeholder="Present (only if no names added)"><input id="ab" type="number" min="0" placeholder="Absent (only if no names added)"></div><div class="row" style="margin-top:0"><input id="en" placeholder="Employee name (or several, separated by commas)"><button class="b" id="ea">+ Add employee</button></div><div id="el"></div><div class="sub" id="es" style="margin-top:6px"></div></div>
+<div id="rv_a" hidden><div class="chips" id="sestabs" style="margin-bottom:14px"><button class="chip on" data-s="am">Morning report</button><button class="chip" data-s="pm">Afternoon report</button></div><div class="card"><div class="lbl" id="alb">EMPLOYEE ATTENDANCE</div><div class="row" style="margin-top:0"><input id="at" type="number" min="0" placeholder="Present count"><input id="ab" type="number" min="0" placeholder="Absent count"></div><div class="row" style="margin-top:0"><input id="en" placeholder="Employee name (or several, separated by commas)"><button class="b" id="ea">+ Add employee</button></div><div id="el"></div><div class="sub" id="es" style="margin-top:6px"></div></div>
 <div class="card"><div class="lbl">ATTENDANCE REPORT (separate from the daily report)</div><div class="row" style="margin:0"><button class="b" id="adp">Download PDF</button><button class="b" id="adi" style="background:var(--ac2)">Download image (PNG)</button></div></div>
 <div class="card"><div class="lbl">PREVIEW</div><canvas id="arc" style="width:100%;border:1px solid var(--bd);border-radius:10px;background:#fff"></canvas></div></div>
 </section>
