@@ -396,7 +396,7 @@ draw();
 (()=>{
 const NS=k=>/^mgr_/.test(k)&&!['mgr_theme','mgr__ts','mgr_sync'].includes(k);
 let cfg=null;try{cfg=JSON.parse(localStorage.getItem('mgr_sync')||'null')}catch(e){}
-cfg=cfg||{url:'',team:'providetech'};
+cfg=(cfg&&(cfg.url||cfg.off))?cfg:{url:'https://providetech-manager-default-rtdb.asia-southeast1.firebasedatabase.app',team:'providetech'};
 try{const m=location.hash.match(/#sync=([^&]+)/);if(m){const c=JSON.parse(atob(decodeURIComponent(m[1])));if(c.u){cfg={url:c.u,team:c.t||'providetech'};localStorage.setItem('mgr_sync',JSON.stringify(cfg))}history.replaceState(null,'',location.pathname+location.search)}}catch(e){}
 const clean=u=>(u||'').trim().replace(/\.json$/,'').replace(/\/+$/,'');
 const on=()=>/^https:\/\//.test(clean(cfg.url));
@@ -424,7 +424,7 @@ const close=()=>{d.remove();if(defer&&!typing())location.reload()};
 $('#sy4').onclick=close;d.addEventListener('click',e=>{if(e.target===d)close()});
 $('#sy1').onclick=()=>{const u=clean($('#syu').value);if(!/^https:\/\//.test(u)){alert('Paste a valid database URL that starts with https://');return}cfg={url:u,team:($('#syt').value||'providetech').trim().replace(/[.$#\[\]\/]/g,'-')};localStorage.setItem('mgr_sync',JSON.stringify(cfg));sync()};
 $('#sy2').onclick=()=>{if(!on()){alert('Save the database URL first.');return}const l=location.href.split('#')[0]+'#sync='+encodeURIComponent(btoa(JSON.stringify({u:clean(cfg.url),t:cfg.team})));if(/^file:/.test(l))alert('This page is opened from a file on this computer. Host it online first, then copy the link from the hosted page.');(navigator.clipboard?navigator.clipboard.writeText(l):Promise.reject()).then(()=>alert('Link copied. Open it on your other devices.'),()=>prompt('Copy this link:',l))};
-$('#sy3').onclick=()=>{if(confirm('Turn sync off on this device? Your data stays on this device.')){cfg={url:'',team:cfg.team};localStorage.setItem('mgr_sync',JSON.stringify(cfg));badge('off')}}};
+$('#sy3').onclick=()=>{if(confirm('Turn sync off on this device? Your data stays on this device.')){cfg={url:'',team:cfg.team,off:true};localStorage.setItem('mgr_sync',JSON.stringify(cfg));badge('off')}}};
 badge(on()?'busy':'off');if(on())setTimeout(sync,300);
 $('#nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b)try{sessionStorage.setItem('mgr_tab',b.dataset.p)}catch(x){}});
 try{const t=sessionStorage.getItem('mgr_tab');if(t&&t!=='today'){const b=document.querySelector('nav button[data-p="'+t+'"]');b&&b.click()}}catch(e){}
