@@ -153,6 +153,42 @@ th,td{padding:7px 8px}
 .gwrap{gap:14px}
 }
 @media(max-width:380px){h1{font-size:17px}#clk svg{width:64px;height:64px}#clkd .ct{font-size:26px}nav button{padding:10px 12px}}
+
+/* ===== CALM MOTION + DASHBOARD + PHONE TAB BAR ===== */
+@keyframes tabin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+#today,#crm,#report,#activity{animation:tabin .22s ease-out}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.dash{display:grid;grid-template-columns:1fr 1fr 2fr;gap:10px;margin-bottom:12px}
+.dash>div{background:color-mix(in srgb,var(--card) 74%,transparent);border:1px solid var(--bd);border-radius:14px;padding:10px 14px;box-shadow:var(--sh);min-width:0}
+.dash span{display:block;font-size:11px;letter-spacing:.08em;color:var(--mu);font-weight:700}
+.dash b{font-size:24px;color:var(--ac);display:block;line-height:1.3}
+.dash b#d3{font-size:15px;line-height:1.6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+nav button[hidden]{display:none!important}
+@media(max-width:640px){
+.dash{grid-template-columns:1fr 1fr}.dash>div:last-child{grid-column:1/-1}
+nav{position:fixed!important;top:auto!important;bottom:0;left:0;right:0;margin:0!important;width:auto!important;border-radius:18px 18px 0 0!important;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))!important;justify-content:space-around;overflow:visible!important;z-index:50;box-shadow:0 -6px 20px rgba(0,0,0,.18)}
+nav button{flex:1!important;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px!important;padding:6px 4px!important;min-height:52px;border-radius:12px}
+nav button::before{font-size:20px;line-height:1}
+nav button[data-p=today]::before{content:'\2705'}nav button[data-p=crm]::before{content:'\1F465'}nav button[data-p=report]::before{content:'\1F4CA'}nav button[data-p=activity]::before{content:'\1F4DC'}
+.w{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))!important}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== SUBTLE MOTION, DASHBOARD STRIP, PHONE BOTTOM BAR ===== */
+@keyframes tabin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+#today,#crm,#report,#activity{animation:tabin .22s ease-out}
+.b:active,.chip:active{transform:translateY(1px)}
+.t,.st{transition:background-color .2s,opacity .2s,color .2s}
+nav button[hidden]{display:none!important}
+.w{perspective:none}
+@media(max-width:640px){
+nav{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:40;margin:0;border-radius:18px 18px 0 0;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));justify-content:space-around;overflow:visible;gap:2px;background:var(--card);border-bottom:0}
+nav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 2px;font-size:11px;min-height:52px;border-radius:12px;white-space:normal;line-height:1.1;text-align:center}
+nav button::before{font-size:20px;line-height:1}
+nav button[data-p="today"]::before{content:"\2705"}nav button[data-p="crm"]::before{content:"\1F465"}nav button[data-p="report"]::before{content:"\1F4CA"}nav button[data-p="activity"]::before{content:"\1F4DC"}
+.w{padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 <div class="gate" id="gate"><form class="card" id="gf" style="max-width:380px;width:100%;margin:0"><div class="ttl">Providetech Manager</div><div class="sub" style="margin-bottom:12px">Sign in to continue.</div><label class="sub" for="gu">Username<input class="in" id="gu" name="username" autocomplete="username" autocapitalize="off" spellcheck="false"></label><label class="sub" for="gn" style="display:block;margin-top:10px">Your name (shown in the activity log)<input class="in" id="gn" name="displayname" autocomplete="name" maxlength="40"></label><label class="sub" for="gp" style="display:block;margin-top:10px">Password<input class="in" id="gp" name="password" type="password" autocomplete="current-password"></label><label class="sub" for="gk" style="display:flex;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" id="gk" checked style="width:auto;margin:0"> Keep me signed in on this device</label><div id="ge" class="sub" style="color:#dc2626;min-height:18px;margin:8px 0" role="alert"></div><button class="b" type="submit" style="width:100%">Sign in</button></form></div><div class="w" id="app" hidden>
 <div class="hero"><div style="display:flex;align-items:center;gap:6px"><div class="cube"><i></i><i></i><i></i><i></i><i></i><i></i></div><div><h1>Providetech Manager</h1><div class="sub" id="dt"></div><div class="synb" id="syn">Local only</div></div></div><div style="display:flex;gap:10px;align-items:center"><div id="clk"></div><button id="thb" title="Theme and background" style="border:0;border-radius:12px;padding:10px 12px;font-size:20px;cursor:pointer;background:rgba(255,255,255,.2)">🎨</button><button id="lgo" title="Sign out" style="border:0;border-radius:12px;padding:10px 12px;font-size:14px;font-weight:600;cursor:pointer;background:rgba(255,255,255,.2);color:#fff">Sign out</button><span id="whoami" class="sub" style="color:#fff;opacity:.9"></span></div></div>
@@ -160,6 +196,7 @@ th,td{padding:7px 8px}
 <nav id="nav"><button data-p="today" class="on">Today</button><button data-p="crm">CRM</button><button data-p="report">Daily Report</button><button data-p="activity" id="nav_act" hidden>Activity log</button></nav>
 
 <section id="today"><div class="mon" id="mon" hidden>Monday: Team meeting at 11:00 AM.</div>
+<div class="dash"><div><span>DONE</span><b id="d1">0</b></div><div><span>PENDING</span><b id="d2">0</b></div><div><span>NEXT UP</span><b id="d3">-</b></div></div>
 <div class="card"><b>Overall progress</b> <span id="pt" class="sub"></span><div class="bar"><i id="pb"></i></div></div>
 <div class="card"><div class="row" style="margin-top:0"><input id="nm" type="text" placeholder="Start (9:00 AM)" maxlength="10" autocomplete="off" style="flex:none;width:140px" title="Start time"><span class="sub" style="align-self:center">to</span><input id="ne" type="text" placeholder="End (9:30 AM)" maxlength="10" autocomplete="off" style="flex:none;width:140px" title="End time"><input id="nt" placeholder="Task / activity"><button class="b" id="na">+ Add</button></div>
 <div class="th2" style="margin-top:12px"><span>TIME (START - END)</span><span>TASK / ACTIVITIES</span><span>STATUS</span><span></span></div>
@@ -847,6 +884,10 @@ $('#ptc').onclick=async()=>{if(!$('#rpt').value.trim())return;if(await ask('Clea
 {const _r4=rep;rep=function(){try{pasteUI()}catch(e){}return _r4()}}
 try{pasteUI()}catch(e){}
 
+
+/* dashboard strip on Today */
+function dash(){const dn=TK.filter(x=>S.done[x.id]).length,n=new Date(),nm=n.getHours()*60+n.getMinutes(),open=srt().filter(x=>!S.done[x.id]),nx=open.find(x=>x.tm&&(+x.tm.slice(0,2)*60+ +x.tm.slice(3,5))>=nm)||open[0];$('#d1').textContent=dn;$('#d2').textContent=TK.length-dn;$('#d3').textContent=nx?((nx.tm?f12(nx.tm)+' \u00b7 ':'')+nx.t):(TK.length?'All done':'No tasks yet')}
+{const _draw=draw;draw=function(){_draw();dash()}}dash();setInterval(dash,60000);
 /* ===== CLOUD SYNC: shares all data between devices through Firebase Realtime Database ===== */
 (()=>{
 const NS=k=>/^mgr_/.test(k)&&!LOC(k)&&!['mgr__ts','mgr_sync'].includes(k);
@@ -877,5 +918,6 @@ $('#sy1').onclick=()=>{const u=clean($('#syu').value);if(!/^https:\/\//.test(u))
 $('#sy3').onclick=async()=>{if(await ask('Turn cloud sync off on this device? Your data stays on this device.')){cfg={url:'',team:cfg.team,off:true};localStorage.setItem('mgr_sync',JSON.stringify(cfg));bd('off')}}};
 bd(on()?'busy':'off');if(on())setTimeout(sync,300);
 })();
+
 </script>
 </body></html>
