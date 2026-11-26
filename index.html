@@ -260,7 +260,7 @@ nav button[data-p="today"]::before{content:"\2705"}nav button[data-p="crm"]::bef
 </section>
 </div>
 <script>
-window.FB_KEY='';try{const c=JSON.parse(localStorage.getItem('mgr_sync')||'null');window.__SEC=!!((c&&c.key)||window.FB_KEY)}catch(e){window.__SEC=!!window.FB_KEY}
+window.FB_KEY='AIzaSyAYUYsK_jTh3d1dZAUhGg1NDsrW4jVZPxE';try{const c=JSON.parse(localStorage.getItem('mgr_sync')||'null');window.__SEC=!!((c&&c.key)||window.FB_KEY)}catch(e){window.__SEC=!!window.FB_KEY}
 const $=s=>document.querySelector(s),today=(d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'))(new Date());
 let S={date:today,done:{},custom:[]},D={closed:null,accounts:null};
 let PUSH=null,WHO=null;const sv=(k,v)=>{let o=null;try{o=localStorage.getItem(k)}catch(e){}try{if(window.__bf)__bf(k,o,v)}catch(e){}try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}if(PUSH)PUSH(k,v);if(window.__sm)__sm(k);try{track(k,o,JSON.stringify(v))}catch(e){}},ld=(k,f)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch(e){return f}};
