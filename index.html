@@ -189,6 +189,10 @@ nav button[data-p="today"]::before{content:"\2705"}nav button[data-p="crm"]::bef
 .w{padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+#undo{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;z-index:120;background:#111827;color:#fff;border-radius:14px;padding:10px 12px 10px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:14px;max-width:92vw}
+#undo[hidden]{display:none}#undo .b{min-height:34px;padding:6px 14px;flex:none}
+@media(max-width:640px){#undo{bottom:calc(84px + env(safe-area-inset-bottom,0px))}}
 </style>
 <div class="gate" id="gate"><form class="card" id="gf" style="max-width:380px;width:100%;margin:0"><div class="ttl">Providetech Manager</div><div class="sub" style="margin-bottom:12px">Sign in to continue.</div><label class="sub" for="gu">Username<input class="in" id="gu" name="username" autocomplete="username" autocapitalize="off" spellcheck="false"></label><label class="sub" for="gn" style="display:block;margin-top:10px">Your name (shown in the activity log)<input class="in" id="gn" name="displayname" autocomplete="name" maxlength="40"></label><label class="sub" for="gp" style="display:block;margin-top:10px">Password<input class="in" id="gp" name="password" type="password" autocomplete="current-password"></label><label class="sub" for="gk" style="display:flex;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" id="gk" checked style="width:auto;margin:0"> Keep me signed in on this device</label><div id="ge" class="sub" style="color:#dc2626;min-height:18px;margin:8px 0" role="alert"></div><button class="b" type="submit" style="width:100%">Sign in</button></form></div><div class="w" id="app" hidden>
 <div class="hero"><div style="display:flex;align-items:center;gap:6px"><div class="cube"><i></i><i></i><i></i><i></i><i></i><i></i></div><div><h1>Providetech Manager</h1><div class="sub" id="dt"></div><div class="synb" id="syn">Local only</div></div></div><div style="display:flex;gap:10px;align-items:center"><div id="clk"></div><button id="thb" title="Theme and background" style="border:0;border-radius:12px;padding:10px 12px;font-size:20px;cursor:pointer;background:rgba(255,255,255,.2)">🎨</button><button id="lgo" title="Sign out" style="border:0;border-radius:12px;padding:10px 12px;font-size:14px;font-weight:600;cursor:pointer;background:rgba(255,255,255,.2);color:#fff">Sign out</button><span id="whoami" class="sub" style="color:#fff;opacity:.9"></span></div></div>
@@ -256,9 +260,10 @@ nav button[data-p="today"]::before{content:"\2705"}nav button[data-p="crm"]::bef
 </section>
 </div>
 <script>
+window.FB_KEY='';try{const c=JSON.parse(localStorage.getItem('mgr_sync')||'null');window.__SEC=!!((c&&c.key)||window.FB_KEY)}catch(e){window.__SEC=!!window.FB_KEY}
 const $=s=>document.querySelector(s),today=(d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'))(new Date());
 let S={date:today,done:{},custom:[]},D={closed:null,accounts:null};
-let PUSH=null,WHO=null;const sv=(k,v)=>{let o=null;try{o=localStorage.getItem(k)}catch(e){}try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}if(PUSH)PUSH(k,v);if(window.__sm)__sm(k);try{track(k,o,JSON.stringify(v))}catch(e){}},ld=(k,f)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch(e){return f}};
+let PUSH=null,WHO=null;const sv=(k,v)=>{let o=null;try{o=localStorage.getItem(k)}catch(e){}try{if(window.__bf)__bf(k,o,v)}catch(e){}try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}if(PUSH)PUSH(k,v);if(window.__sm)__sm(k);try{track(k,o,JSON.stringify(v))}catch(e){}},ld=(k,f)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch(e){return f}};
 S=ld('mgr_day',S);if(S.date!==today)S={date:today,done:{},custom:[]};
 D=ld('mgr_data',D);
 $('#dt').textContent=new Date().toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
@@ -596,14 +601,14 @@ const sha=async s=>{try{const b=await crypto.subtle.digest('SHA-256',new TextEnc
 const stored=()=>{try{return JSON.parse(localStorage.getItem('auth_ok')||sessionStorage.getItem('auth_ok')||'null')}catch(e){return null}};
 const enter=(who,fresh)=>{WHO=who;gate.hidden=true;app.hidden=false;$('#whoami').textContent=who.n+' · '+(who.r==='admin'?'Admin':'Manager');const isA=who.r==='admin';$('#nav_act').hidden=!isA;if(isA)setTimeout(actStart,0);if(!isA&&!$('#activity').hidden){$('#activity').hidden=true;$('#today').hidden=false;document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.p==='today'))}if(fresh)logEv('Signed in','');try{tick();draw();if(!$('#report').hidden)rep()}catch(e){}};
 const leave=async()=>{try{await logEv('Signed out','',true)}catch(e){}try{localStorage.removeItem('auth_ok');sessionStorage.removeItem('auth_ok')}catch(e){}WHO=null;app.hidden=true;gate.hidden=false;$('#gp').value='';$('#ge').textContent='';$('#gu').focus()};
-const st=stored();if(st&&ACCTS[st.r]&&st.h===ACCTS[st.r].h&&st.n)enter({r:st.r,n:st.n},false);else $('#gu').focus();
+const st=stored();if(!window.__SEC&&st&&ACCTS[st.r]&&st.h===ACCTS[st.r].h&&st.n)enter({r:st.r,n:st.n},false);else $('#gu').focus();
 try{const n=localStorage.getItem('auth_name');if(n&&!$('#gn').value)$('#gn').value=n}catch(e){}
-$('#gf').addEventListener('submit',async e=>{e.preventDefault();const u=$('#gu').value.trim().toLowerCase(),p=$('#gp').value,h=await sha(u+':'+p),er=$('#ge'),a=ACCTS[u];
+$('#gf').addEventListener('submit',async e=>{e.preventDefault();if(window.__SEC){if(window.__secLogin)window.__secLogin();return}const u=$('#gu').value.trim().toLowerCase(),p=$('#gp').value,h=await sha(u+':'+p),er=$('#ge'),a=ACCTS[u];
 if(!h){er.textContent='Sign-in is not available in this browser.';return}
 if(!a||h!==a.h){er.textContent='Wrong username or password.';$('#gp').value='';$('#gp').focus();try{logEv('Failed sign-in','Username tried: '+u.slice(0,30),false,{r:'unknown',n:'Unknown'})}catch(x){}return}
 const n=($('#gn').value.trim()||a.label).slice(0,40);
 try{localStorage.setItem('auth_name',n);(($('#gk').checked?localStorage:sessionStorage)).setItem('auth_ok',JSON.stringify({r:a.r,n,h:a.h}))}catch(x){}er.textContent='';enter({r:a.r,n},true)});
-$('#lgo').onclick=leave})();
+$('#lgo').onclick=async()=>{await leave();if(window.__secOut)window.__secOut()};window.__enter=enter})();
 
 /* ===== NEW vs RENEWAL GRAPH (sub sections) ===== */
 function sgraph(s,rows,isN,isR,si){const el=$('#sg');if(!el)return;const t=rows.length,nn=rows.filter(o=>o.r.some(isN)).length,rr=rows.filter(o=>o.r.some(isR)).length;
@@ -893,17 +898,18 @@ function dash(){const dn=TK.filter(x=>S.done[x.id]).length,n=new Date(),nm=n.get
 const NS=k=>/^mgr_/.test(k)&&!LOC(k)&&!['mgr__ts','mgr_sync'].includes(k);
 let cfg=null;try{cfg=JSON.parse(localStorage.getItem('mgr_sync')||'null')}catch(e){}
 cfg=(cfg&&(cfg.url||cfg.off))?cfg:{url:'https://providetech-manager-default-rtdb.asia-southeast1.firebasedatabase.app',team:'providetech'};
+cfg.key=cfg.key||window.FB_KEY||'';
 const clean=u=>(u||'').trim().replace(/\.json$/,'').replace(/\/+$/,'');
 const on=()=>/^https:\/\//.test(clean(cfg.url));
 const base=()=>clean(cfg.url)+'/'+encodeURIComponent(cfg.team||'providetech');
-window.__fb={on,base};
+window.__fb={on,base,cfg:()=>cfg,clean,setCfg:o=>{cfg=o;localStorage.setItem('mgr_sync',JSON.stringify(cfg))},sync:()=>sync()};
 let TS={};try{TS=JSON.parse(localStorage.getItem('mgr__ts')||'{}')}catch(e){}
 const saveTS=()=>{try{localStorage.setItem('mgr__ts',JSON.stringify(TS))}catch(e){}};
-const MS={off:['Local only (click to set up cloud sync)',''],busy:['Syncing...','#d97706'],ok:['Shared \u2022 live (cloud)','#16a34a'],err:['Cloud sync problem, retrying...','#b91c1c']};
+const MS={need:['Sign in to start syncing',''],off:['Local only (click to set up cloud sync)',''],busy:['Syncing...','#d97706'],ok:['Shared \u2022 live (cloud)','#16a34a'],err:['Cloud sync problem, retrying...','#b91c1c']};
 let last='off',busyF=false,again=false,tmr;
 const bd=k=>{last=k;const e=$('#syn');if(e){e.textContent=MS[k][0];e.style.background=MS[k][1];e.style.cursor='pointer';e.title='Click to change cloud sync settings'}if($('#sys'))$('#sys').textContent=MS[k][0]};
 window.__sm=k=>{if(!NS(k))return;TS[k]=Date.now();saveTS();if(on()){clearTimeout(tmr);tmr=setTimeout(sync,700)}};
-async function sync(){if(!on())return bd('off');if(busyF){again=true;return}busyF=true;bd('busy');
+async function sync(){if(!on())return bd('off');if(window.__SEC&&!window.__AUTH)return bd('need');if(busyF){again=true;return}busyF=true;bd('busy');try{if(window.__tokReady)await window.__tokReady()}catch(e){}
 try{const mr=await fetch(base()+'/m.json');if(!mr.ok)throw 0;const M=(await mr.json())||{};
 const up={};Object.keys(localStorage).filter(NS).forEach(k=>{const lt=TS[k]||0,rt=M[k]||0;if(!(k in M)||lt>rt){const t=lt||Date.now();TS[k]=t;up['d/'+k]=localStorage.getItem(k);up['m/'+k]=t}});
 if(Object.keys(up).length){const r=await fetch(base()+'.json',{method:'PATCH',body:JSON.stringify(up)});if(!r.ok)throw 0}
@@ -919,5 +925,78 @@ $('#sy3').onclick=async()=>{if(await ask('Turn cloud sync off on this device? Yo
 bd(on()?'busy':'off');if(on())setTimeout(sync,300);
 })();
 
+
+/* ===== SECURE SIGN-IN (Firebase Authentication), ACCOUNTS AND BACKUPS ===== */
+(()=>{
+const F=window.__fb,Cf=()=>F.cfg(),KEY=()=>(Cf().key||window.FB_KEY||'').trim(),DB=()=>F.clean(Cf().url),IDT='https://identitytoolkit.googleapis.com/v1/accounts:';
+let A=null;window.__AUTH=null;
+const _f=window.fetch.bind(window);
+window.fetch=(u,o)=>{if(A&&A.tok&&typeof u==='string'&&F.on()&&u.startsWith(DB()+'/'))u+=(u.includes('?')?'&':'?')+'auth='+encodeURIComponent(A.tok);return _f(u,o)};
+const J=async(u,o)=>{try{const r=await fetch(u,o);let b=null;try{b=await r.json()}catch(e){}return{ok:r.ok,s:r.status,b}}catch(e){return{ok:false,s:0,b:null}}};
+const em=u=>u.toLowerCase().replace(/[^a-z0-9._-]/g,'')+'@providetech.local';
+const jp=b=>({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+const keep=()=>{if(!A)return;const v=JSON.stringify({rt:A.rt,uid:A.uid,n:A.name});try{(A.keep?localStorage:sessionStorage).setItem('sec_sess',v);(A.keep?sessionStorage:localStorage).removeItem('sec_sess')}catch(e){}};
+async function refresh(){if(!A||!A.rt)return false;const r=await J('https://securetoken.googleapis.com/v1/token?key='+KEY(),{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'grant_type=refresh_token&refresh_token='+encodeURIComponent(A.rt)});if(!r.ok||!r.b||!r.b.id_token)return false;A.tok=r.b.id_token;A.rt=r.b.refresh_token||A.rt;A.exp=Date.now()+(+r.b.expires_in||3600)*1000;keep();return true}
+window.__tokReady=async()=>{if(A&&Date.now()>A.exp-180000)await refresh()};
+setInterval(()=>{if(A)refresh()},40*60000);
+window.__secOut=()=>{A=null;window.__AUTH=null;try{localStorage.removeItem('sec_sess');sessionStorage.removeItem('sec_sess')}catch(e){}F.sync()};
+window.__secLogin=async()=>{const u=$('#gu').value.trim(),p=$('#gp').value,er=$('#ge'),nm=$('#gn').value.trim();if(!u||!p){er.textContent='Enter your username and password.';return}er.textContent='Signing in...';
+const r=await J(IDT+'signInWithPassword?key='+KEY(),jp({email:em(u),password:p,returnSecureToken:true}));
+if(!r.ok){er.textContent=r.s===0?'No internet connection.':/TOO_MANY/.test(JSON.stringify(r.b))?'Too many attempts. Try again later.':/API key/i.test(JSON.stringify(r.b))?'The Firebase API key is not valid.':'Wrong username or password.';$('#gp').value='';return}
+A={tok:r.b.idToken,rt:r.b.refreshToken,uid:r.b.localId,exp:Date.now()+(+r.b.expiresIn||3600)*1000,keep:$('#gk').checked};window.__AUTH=A;
+let me=await J(DB()+'/users/'+A.uid+'.json');
+if(!(me.b&&me.b.role)){const ex=await J(DB()+'/users.json?shallow=true');if(!(ex.ok&&ex.b)){const c=await J(DB()+'/users/'+A.uid+'.json',{method:'PUT',body:JSON.stringify({role:'admin',name:nm||u,u:u.toLowerCase()})});if(c.ok)me={ok:true,b:{role:'admin',name:nm||u}}}}
+if(!(me.b&&me.b.role)){A=null;window.__AUTH=null;er.textContent='This account has no access yet. Ask an admin to add you.';return}
+A.role=me.b.role==='admin'?'admin':'manager';A.name=(nm||me.b.name||u).slice(0,40);keep();er.textContent='';try{localStorage.setItem('auth_name',A.name)}catch(e){}
+window.__enter({r:A.role,n:A.name,uid:A.uid},true);F.sync();setTimeout(autoBackup,6000)};
+(async()=>{if(!window.__SEC)return;let v=null;try{v=localStorage.getItem('sec_sess')||sessionStorage.getItem('sec_sess')}catch(e){}if(!v)return;let s;try{s=JSON.parse(v)}catch(e){return}
+A={rt:s.rt,uid:s.uid,keep:!!localStorage.getItem('sec_sess')};if(!await refresh()){A=null;window.__AUTH=null;$('#ge').textContent='Please sign in again.';return}
+const me=await J(DB()+'/users/'+A.uid+'.json');if(!(me.b&&me.b.role)){A=null;window.__AUTH=null;try{localStorage.removeItem('sec_sess');sessionStorage.removeItem('sec_sess')}catch(e){}$('#ge').textContent='Your access was removed. Ask an admin.';return}
+A.role=me.b.role==='admin'?'admin':'manager';A.name=s.n||me.b.name;window.__AUTH=A;window.__enter({r:A.role,n:A.name,uid:A.uid},false);F.sync();setTimeout(autoBackup,6000)})();
+/* backups */
+const NSK=k=>/^mgr_/.test(k)&&!LOC(k)&&!['mgr__ts','mgr_sync'].includes(k);
+const snap=()=>{const o={};Object.keys(localStorage).filter(NSK).forEach(k=>o[k]=localStorage.getItem(k));return o};
+async function restoreObj(o){const ks=o&&o.keys&&typeof o.keys==='object'?Object.keys(o.keys).filter(NSK):[];if(!ks.length){say('This is not a valid Providetech backup.');return}
+if(!await ask('Restore '+ks.length+' saved items from this backup? It overwrites the matching data on all connected devices. You can press Undo right after.',{yes:'Restore'}))return;
+ks.forEach(k=>{try{sv(k,JSON.parse(o.keys[k]))}catch(e){}});ks.forEach(k=>{try{resync(k)}catch(e){}});say('Backup restored.')}
+async function autoBackup(){if(!F.on()||Cf().off)return;if(window.__SEC&&!(A&&A.role==='admin'))return;const d=today;try{if(localStorage.getItem('pt_lastbk')===d)return}catch(e){}
+const r=await J(DB()+'/backups/'+d+'.json',{method:'PUT',body:JSON.stringify(JSON.stringify(snap()))});if(!r.ok)return;try{localStorage.setItem('pt_lastbk',d)}catch(e){}
+const l=await J(DB()+'/backups.json?shallow=true');if(l.ok&&l.b)Object.keys(l.b).sort().slice(0,-14).forEach(k=>J(DB()+'/backups/'+k+'.json',{method:'DELETE'}))}
+if(!window.__SEC)setTimeout(autoBackup,8000);setInterval(autoBackup,30*60000);
+/* dialog */
+const open=()=>{let d=$('#syd');if(d){d.remove();return}const c=Cf(),adm=window.__SEC&&A&&A.role==='admin',cloudBk=F.on()&&(!window.__SEC||adm);
+d=document.createElement('div');d.id='syd';d.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto';
+d.innerHTML=`<div class="card" style="max-width:600px;width:100%;margin:20px 0"><b style="font-size:18px">Cloud sync, accounts and backups</b><div class="sub" id="sys" style="margin:6px 0 12px"></div>
+<div class="lbl">FIREBASE REALTIME DATABASE URL</div><input id="syu" class="in" style="width:100%;margin-bottom:10px"><div class="lbl">TEAM CODE</div><input id="syt" class="in" style="width:100%;margin-bottom:10px">
+<div class="lbl">FIREBASE WEB API KEY (turns on secure sign-in)</div><input id="syk" class="in" style="width:100%;margin-bottom:12px" placeholder="Leave empty to keep the simple shared login">
+<div class="row" style="margin-top:0"><button class="b" id="sy1">Save &amp; sync now</button><button class="b g" id="sy3">Turn off</button><button class="b g" id="sy4">Close</button></div>
+${adm?`<div class="lbl" style="margin-top:18px">ACCOUNTS (who can sign in)</div><div id="acc_list" class="sub">Loading...</div><div class="row"><input id="acc_u" class="in" placeholder="Username" autocapitalize="off"><input id="acc_p" class="in" type="password" placeholder="Password (6+ characters)"></div><div class="row"><input id="acc_n" class="in" placeholder="Display name"><select id="acc_r" class="in"><option value="manager">Manager</option><option value="admin">Admin</option></select><button class="b" id="acc_add">Add account</button></div>`:''}
+<div class="lbl" style="margin-top:18px">BACKUPS</div><div class="row" style="margin-top:0"><button class="b" id="bk1">Download backup</button><button class="b g" id="bk2">Restore from file</button></div>${cloudBk?`<div class="sub" style="margin-top:10px">Automatic daily backups kept in the cloud (last 14 days):</div><div id="bkl" class="sub">Loading...</div>`:''}</div>`;
+document.body.append(d);$('#syu').value=F.clean(c.url);$('#syt').value=c.team||'providetech';$('#syk').value=c.key||'';
+$('#sys').textContent=$('#syn').textContent;
+const close=()=>d.remove();$('#sy4').onclick=close;d.addEventListener('click',e=>{if(e.target===d)close()});
+$('#sy1').onclick=()=>{const u=F.clean($('#syu').value);if(!/^https:\/\//.test(u)){say('Paste a valid database URL that starts with https://');return}const k=$('#syk').value.trim(),ch=k!==(c.key||'');F.setCfg({url:u,team:($('#syt').value||'providetech').trim().replace(/[.$#\[\]\/]/g,'-'),key:k});if(ch){location.reload();return}F.sync()};
+$('#sy3').onclick=async()=>{if(await ask('Turn cloud sync off on this device? Your data stays on this device.')){F.setCfg({url:'',team:c.team,off:true,key:c.key||''});F.sync();close()}};
+$('#bk1').onclick=()=>{const b=new Blob([JSON.stringify({app:'providetech',v:1,t:new Date().toISOString(),keys:snap()})],{type:'application/json'});saveFile('Providetech backup '+today+'.json',b)};
+$('#bk2').onclick=()=>{const i=document.createElement('input');i.type='file';i.accept='.json,application/json';i.onchange=async()=>{const f=i.files[0];if(!f)return;let o=null;try{o=JSON.parse(await f.text())}catch(e){}close();restoreObj(o)};i.click()};
+if(cloudBk)(async()=>{const l=await J(DB()+'/backups.json?shallow=true'),el=$('#bkl');if(!el)return;const ks=l.ok&&l.b?Object.keys(l.b).sort().reverse():[];el.innerHTML=ks.length?ks.map(k=>`<div class="er"><b>${esc(k)}</b><button class="b g" data-bk="${esc(k)}" style="min-height:34px;padding:6px 12px">Restore</button></div>`).join(''):'No cloud backups yet. The first one is saved automatically.';el.onclick=async e=>{const b=e.target.closest('button[data-bk]');if(!b)return;const r=await J(DB()+'/backups/'+b.dataset.bk+'.json');let o=null;try{o={keys:JSON.parse(r.b)}}catch(x){}close();restoreObj(o)}})();
+if(adm){const el=$('#acc_list');const load=async()=>{const r=await J(DB()+'/users.json');if(!r.ok){el.textContent='Could not load accounts.';return}const o=r.b||{};el.innerHTML=Object.entries(o).map(([id,v])=>`<div class="er"><span><b>${esc(v.name||v.u||id)}</b> <span class="sub">${esc(v.u||'')} \u00b7 ${esc(v.role||'')}</span></span>${id===A.uid?'<span class="sub">you</span>':`<button class="x" data-rm="${esc(id)}" title="Remove access">\u2715</button>`}</div>`).join('')||'No accounts yet.'};load();
+el.onclick=async e=>{const b=e.target.closest('button[data-rm]');if(!b)return;if(!await ask('Remove this account\'s access? They will no longer be able to sign in.',{yes:'Remove'}))return;await J(DB()+'/users/'+b.dataset.rm+'.json',{method:'DELETE'});load()};
+$('#acc_add').onclick=async()=>{const u=$('#acc_u').value.trim(),p=$('#acc_p').value,n=$('#acc_n').value.trim()||u,ro=$('#acc_r').value;if(!/^[a-z0-9._-]{3,30}$/i.test(u)){say('Username: 3 to 30 letters, numbers, dots, dashes or underscores.');return}if(p.length<6){say('The password must be at least 6 characters.');return}
+let r=await J(IDT+'signUp?key='+KEY(),jp({email:em(u),password:p,returnSecureToken:true}));
+if(!r.ok&&/EMAIL_EXISTS/.test(JSON.stringify(r.b))){r=await J(IDT+'signInWithPassword?key='+KEY(),jp({email:em(u),password:p,returnSecureToken:true}));if(!r.ok){say('That username already exists with a different password.');return}}
+else if(!r.ok){say('Could not create the account. Make sure Email/Password sign-in is turned on in Firebase.');return}
+const w=await J(DB()+'/users/'+r.b.localId+'.json',{method:'PUT',body:JSON.stringify({role:ro,name:n,u:u.toLowerCase()})});say(w.ok?'Account saved. They can sign in now.':'The account was created, but access could not be saved.');$('#acc_u').value=$('#acc_p').value=$('#acc_n').value='';load()}}};
+$('#syn').onclick=open;
+})();
+/* ===== UNDO FOR DELETES ===== */
+(()=>{
+const UK=/^(mgr_tasks|mgr_emp|mgr_crm|mgr_wb2|mgr_tnames|mgr_tbl_.+)$/;
+const cnt=x=>Array.isArray(x)?x.reduce((a,y)=>a+1+cnt(y),0):(x&&typeof x==='object'?Object.values(x).reduce((a,y)=>a+cnt(y),0):0);
+let pend={},tm=null,und=false;
+const el=document.createElement('div');el.id='undo';el.hidden=true;el.innerHTML='<span id="undot"></span><button class="b" id="undob">Undo</button>';document.body.append(el);
+window.__bf=(k,o,v)=>{if(und||!o||!UK.test(k))return;let n0,n1;try{n0=cnt(JSON.parse(o));n1=cnt(v)}catch(e){return}if(!(n1<n0))return;if(!(k in pend))pend[k]=o;const big=/^mgr_(crm|wb2)$/.test(k),d=n0-n1;$('#undot').textContent=big?'Deleted.':'Deleted '+d+' '+(k==='mgr_tasks'?'task':k==='mgr_emp'?'employee':'row')+(d>1?'s':'')+'.';el.hidden=false;clearTimeout(tm);tm=setTimeout(()=>{el.hidden=true;pend={}},9000)};
+$('#undob').onclick=()=>{und=true;try{Object.entries(pend).forEach(([k,o])=>{sv(k,JSON.parse(o));try{resync(k)}catch(e){}})}finally{und=false}pend={};el.hidden=true;clearTimeout(tm)};
+})();
 </script>
 </body></html>
